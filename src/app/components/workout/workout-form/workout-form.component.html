@@ -1,0 +1,38 @@
+<p-card header="Add Workout">
+  <form [formGroup]="workoutForm" (ngSubmit)="onSubmit()">
+    <div class="p-fluid">
+      <div class="field">
+        <label for="username">User Name</label>
+        <input pInputText id="username" formControlName="username" />
+      </div>
+
+      <div class="field">
+        <label for="workoutType">Workout Type</label>
+        <p-select
+          id="workoutType"
+          [options]="workoutTypes"
+          formControlName="workoutType"
+          optionLabel="name"
+          placeholder="Select a Workout Type"
+          [style]="{ width: '100%' }"
+        ></p-select>
+      </div>
+
+      <div class="field">
+        <label for="minutes">Minutes</label>
+        <input
+          type="number"
+          pInputText
+          id="minutes"
+          formControlName="minutes"
+        />
+      </div>
+
+      <p-button
+        type="submit"
+        label="Add Workout"
+        [disabled]="workoutForm.invalid"
+      ></p-button>
+    </div>
+  </form>
+</p-card>

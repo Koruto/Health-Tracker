@@ -9,10 +9,19 @@
   }
 </style>
 
-<h1>Health Tracker App</h1>
+<div class="card">
+  <p-splitter [panelSizes]="[10, 90]" [style]="{ height: '100vh' }">
+    <ng-template #panel class="m-2">
+      <app-sidebar></app-sidebar>
+    </ng-template>
+    <ng-template #panel>
+      <app-main-layout></app-main-layout>
+    </ng-template>
+  </p-splitter>
+</div>
 
-<app-workout-form></app-workout-form>
+<!-- <app-workout-form></app-workout-form>
 
-<app-workout-list></app-workout-list>
+<app-workout-list></app-workout-list> -->
 
 <router-outlet />

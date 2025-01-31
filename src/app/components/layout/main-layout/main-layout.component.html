@@ -1,0 +1,16 @@
+<div class="flex h-screen overflow-hidden bg-gray-50">
+  <main
+    class="flex-1 overflow-y-auto scroll-smooth snap-y snap-mandatory"
+    (scroll)="onScroll($event)"
+  >
+    <section id="workouts" class="min-h-screen snap-start p-6">
+      <app-workout-form></app-workout-form>
+      <app-workout-list></app-workout-list>
+    </section>
+
+    <section id="analytics" class="min-h-screen snap-start p-6">
+      <app-workout-analytics></app-workout-analytics>
+    </section>
+  </main>
+</div>
+3

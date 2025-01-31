@@ -1,0 +1,110 @@
+<!-- workout-list.component.html -->
+<div class="card">
+  <!-- Search and Filter Section -->
+  <div class="flex flex-column md:flex-row gap-3 mb-4">
+    <span class="p-input-icon-left flex-1">
+      <i class="pi pi-search"></i>
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchChange()"
+        placeholder="Search by username..."
+        class="w-full"
+      />
+    </span>
+
+    <p-dropdown
+      [options]="workoutTypes"
+      [(ngModel)]="selectedWorkoutType"
+      (ngModelChange)="onWorkoutTypeChange()"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Select Workout Type"
+      [style]="{ width: '200px' }"
+    ></p-dropdown>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="flex justify-content-between mb-4">
+    <div class="flex gap-2">
+      <p-button
+        type="button"
+        icon="pi pi-chevron-left"
+        (click)="prev()"
+        [disabled]="isFirstPage()"
+        [text]="true"
+      />
+      <p-button
+        type="button"
+        icon="pi pi-refresh"
+        (click)="reset()"
+        [text]="true"
+      />
+      <p-button
+        type="button"
+        icon="pi pi-chevron-right"
+        (click)="next()"
+        [disabled]="isLastPage()"
+        [text]="true"
+      />
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <p-table
+    [value]="filteredWorkouts"
+    [paginator]="true"
+    [rows]="rows"
+    [first]="first"
+    [totalRecords]="totalRecords"
+    [loading]="loading"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[5, 10, 25, 50]"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} workouts"
+    (onPage)="pageChange($event)"
+    styleClass="p-datatable-striped"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Username</th>
+        <th>Workout Type</th>
+        <th>Minutes</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-workout>
+      <tr>
+        <td>{{ workout.username }}</td>
+        <td>{{ workout.workoutType }}</td>
+        <td>{{ workout.minutes }}</td>
+        <td>{{ workout.date | date : "medium" }}</td>
+        <td>
+          <div class="flex gap-2">
+            <!-- <p-button
+              icon="pi pi-pencil"
+              (click)="editWorkout(workout)"
+              [text]="true"
+              severity="secondary"
+            />
+            <p-button
+              icon="pi pi-trash"
+              (click)="deleteWorkout(workout)"
+              [text]="true"
+              severity="danger"
+            /> -->
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="text-center p-4">No workouts found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
