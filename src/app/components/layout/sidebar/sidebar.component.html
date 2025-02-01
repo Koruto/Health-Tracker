@@ -1,1 +1,47 @@
-<p>sidebar works!</p>
+<div
+  class="left-0 top-0 h-screen w-20 bg-white text-black flex flex-col items-center py-6 shadow-xl"
+>
+  <div class="mb-10">
+    <div class="w-10 h-10 rounded-xl overflow-hidden bg-center">
+      <img
+        src="/FyleIcon.png"
+        alt="Fyle Icon"
+        class="w-full h-full object-contain bg-center"
+      />
+    </div>
+  </div>
+
+  <div class="w-12 h-px bg-gray-600 mb-6"></div>
+
+  <div class="flex flex-col gap-5">
+    <div class="cursor-pointer group" (click)="navigateToSection('workouts')">
+      <div
+        class="relative transform transition-all duration-300 group-hover:scale-105 p-3 rounded-lg"
+        [class.bg-gray-100]="activeSection === 'workouts'"
+        pTooltip="Dashboard"
+        tooltipPosition="right"
+      >
+        <ng-icon
+          name="octHome"
+          size="20"
+          [color]="activeSection === 'workouts' ? '#2563eb' : ''"
+        />
+      </div>
+    </div>
+
+    <div class="cursor-pointer group" (click)="navigateToSection('analytics')">
+      <div
+        class="relative transform transition-all duration-300 group-hover:scale-105 p-3 rounded-lg"
+        [class.bg-gray-100]="activeSection === 'analytics'"
+        pTooltip="Analytics"
+        tooltipPosition="right"
+      >
+        <ng-icon
+          name="octGraph"
+          size="20"
+          [color]="activeSection === 'analytics' ? '#2563eb' : ''"
+        />
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,15 +1,12 @@
+<!-- main-layout.component.html -->
 <div class="flex h-screen overflow-hidden bg-gray-50">
-  <main
-    class="flex-1 overflow-y-auto scroll-smooth snap-y snap-mandatory"
-    (scroll)="onScroll($event)"
-  >
-    <section id="workouts" class="min-h-screen snap-start p-6">
+  <main class="flex-1 overflow-y-auto scroll-smooth snap-y snap-mandatory">
+    <section id="workouts" class="h-screen snap-start p-6 overflow-y-auto">
       <app-workout-management></app-workout-management>
     </section>
 
-    <section id="analytics" class="min-h-screen snap-start p-6">
+    <section id="analytics" class="h-screen snap-start p-6 overflow-y-auto">
       <app-workout-analytics></app-workout-analytics>
     </section>
   </main>
 </div>
-3

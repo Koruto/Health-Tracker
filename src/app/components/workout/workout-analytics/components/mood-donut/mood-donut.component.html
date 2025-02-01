@@ -1,0 +1,24 @@
+<div class="relative w-10 h-10">
+  <svg class="w-full h-full" viewBox="0 0 36 36">
+    <path
+      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+      fill="none"
+      stroke="#f1f5f9"
+      stroke-width="3"
+    />
+    <path
+      d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+      fill="none"
+      [attr.stroke]="getRingColor()"
+      stroke-width="3"
+      [attr.stroke-dasharray]="getDashArray()"
+      stroke-linecap="round"
+    />
+  </svg>
+  <div
+    class="absolute inset-0 flex items-center justify-center text-sm font-semibold"
+    [style.color]="getTextColor()"
+  >
+    {{ value }}
+  </div>
+</div>

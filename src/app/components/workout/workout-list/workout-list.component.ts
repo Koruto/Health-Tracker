@@ -7,9 +7,13 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { InputTextModule } from 'primeng/inputtext';
 import { RatingModule } from 'primeng/rating';
 import { TooltipModule } from 'primeng/tooltip';
+import { RippleModule } from 'primeng/ripple';
+import { TagModule } from 'primeng/tag';
 
 import { WorkoutService } from '../../../services/workout.service';
-import { Workout } from '../../../interfaces/workout';
+import { Workout } from '@interfaces/workout';
+import { CalendarModule } from 'primeng/calendar';
+import { MoodDonutComponent } from '../workout-analytics/components/mood-donut/mood-donut.component';
 
 @Component({
   selector: 'app-workout-list',
@@ -23,6 +27,10 @@ import { Workout } from '../../../interfaces/workout';
     MultiSelectModule,
     RatingModule,
     TooltipModule,
+    RippleModule,
+    CalendarModule,
+    TagModule,
+    MoodDonutComponent,
   ],
   templateUrl: './workout-list.component.html',
   styleUrl: './workout-list.component.scss',
@@ -47,6 +55,9 @@ export class WorkoutListComponent implements OnInit {
     { name: 'Medium', value: 'Medium' },
     { name: 'High', value: 'High' },
   ];
+
+  selectedWorkouts: Workout[] = [];
+  editingWorkout: Workout | null = null;
 
   constructor(private workoutService: WorkoutService) {}
 
