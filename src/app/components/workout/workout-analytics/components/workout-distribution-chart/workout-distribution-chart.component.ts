@@ -1,5 +1,4 @@
-//components/workout-analytics/components/workout-distribution/workout-distribution.component.ts
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
@@ -11,7 +10,7 @@ import { Workout } from '@interfaces/workout';
   imports: [CommonModule, CardModule, ChartModule],
   templateUrl: './workout-distribution-chart.component.html',
 })
-export class WorkoutDistributionComponent implements OnInit {
+export class WorkoutDistributionComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
   chartData: any;
@@ -26,18 +25,14 @@ export class WorkoutDistributionComponent implements OnInit {
     'rgba(255, 205, 86, 0.7)', // Yellow
   ];
 
-  ngOnInit() {
-    if (this.workouts.length) {
-      this.processWorkoutData();
-    }
+  ngOnChanges() {
+    this.processWorkoutData();
   }
 
   private processWorkoutData(): void {
-    // Count workouts by type
+    // Count workouts by type - removed username filter
     const workoutCounts = this.workouts.reduce((acc, workout) => {
-      if (workout.username === 'John Doe') {
-        acc[workout.workoutType] = (acc[workout.workoutType] || 0) + 1;
-      }
+      acc[workout.workoutType] = (acc[workout.workoutType] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
@@ -6,21 +6,20 @@ import { Workout } from '@interfaces/workout';
 
 @Component({
   selector: 'app-weekly-progress-card',
+  standalone: true,
   imports: [CommonModule, CardModule, TagModule],
   templateUrl: './weekly-progress-card.component.html',
   styleUrl: './weekly-progress-card.component.scss',
 })
-export class WeeklyProgressCardComponent {
+export class WeeklyProgressCardComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
   currentWeekCount: number = 0;
   progressPercentage: number = 0;
   isPositiveGrowth: boolean = true;
 
-  ngOnInit() {
-    if (this.workouts.length) {
-      this.calculateWeeklyProgress();
-    }
+  ngOnChanges() {
+    this.calculateWeeklyProgress();
   }
 
   private calculateWeeklyProgress(): void {
@@ -37,24 +36,16 @@ export class WeeklyProgressCardComponent {
     const lastWeekEnd = new Date(currentWeekStart);
     lastWeekEnd.setHours(23, 59, 59, 999);
 
-    // Get workouts for current week
+    // Get workouts for current week - removed username filter
     const currentWeekWorkouts = this.workouts.filter((workout) => {
       const workoutDate = new Date(workout.date);
-      return (
-        workoutDate >= currentWeekStart &&
-        workoutDate <= currentDate &&
-        workout.username === 'John Doe'
-      );
+      return workoutDate >= currentWeekStart && workoutDate <= currentDate;
     });
 
-    // Get workouts for last week
+    // Get workouts for last week - removed username filter
     const lastWeekWorkouts = this.workouts.filter((workout) => {
       const workoutDate = new Date(workout.date);
-      return (
-        workoutDate >= lastWeekStart &&
-        workoutDate < currentWeekStart &&
-        workout.username === 'John Doe'
-      );
+      return workoutDate >= lastWeekStart && workoutDate < currentWeekStart;
     });
 
     this.currentWeekCount = currentWeekWorkouts.length;

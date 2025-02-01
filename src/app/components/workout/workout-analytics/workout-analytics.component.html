@@ -1,50 +1,121 @@
-<!-- workout-analytics.component.html -->
-<div class="p-4">
-  <!-- First row with 4 equal columns -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-    <div class="col-span-1">
-      <app-streak-card [workouts]="workouts"></app-streak-card>
-    </div>
-    <div class="col-span-1">
-      <app-most-active-exercise-card
-        [workouts]="workouts"
-      ></app-most-active-exercise-card>
-    </div>
-    <div class="col-span-1">
-      <app-weekly-progress-card
-        [workouts]="workouts"
-      ></app-weekly-progress-card>
-    </div>
-    <div class="col-span-1">
-      <app-calories-summary-card
-        [workouts]="workouts"
-      ></app-calories-summary-card>
+<div class="flex flex-col lg:flex-row lg:space-x-4">
+  <!-- Username filter section -->
+  <div class="w-full lg:w-64 mb-4 lg:mb-0">
+    <div
+      class="bg-white shadow-lg rounded-lg p-4 h-full sticky top-4 transition-all"
+    >
+      <h3 class="text-lg font-semibold mb-3 text-gray-800">
+        Filter by Username
+      </h3>
+      <div class="rounded-lg bg-gray-50">
+        <p-listbox
+          [options]="usernames"
+          [(ngModel)]="selectedUsername$.value"
+          (onChange)="onUsernameSelect($event.value)"
+          [filter]="true"
+          filterBy="label"
+          [style]="{
+            width: '100%',
+            height: 'calc(100vh - 200px)',
+            minHeight: '300px'
+          }"
+          emptyMessage="No usernames found"
+          placeHolder="'Search username...'"
+          optionLabel="username"
+          styleClass="!border-0 !bg-transparent"
+        >
+          <ng-template let-username pTemplate="item">
+            <div
+              class="flex items-center p-3 hover:bg-gray-100 transition-colors duration-200 rounded-md cursor-pointer"
+            >
+              <div class="flex items-center space-x-3">
+                <!-- Optional: Add an avatar or icon -->
+                <div
+                  class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600"
+                >
+                  {{ username.charAt(0).toUpperCase() }}
+                </div>
+                <span class="text-sm font-medium text-gray-700">{{
+                  username
+                }}</span>
+              </div>
+            </div>
+          </ng-template>
+        </p-listbox>
+      </div>
+
+      <div
+        *ngIf="selectedUsername$.value"
+        class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100"
+      >
+        <p class="text-sm font-medium text-gray-700">
+          Selected User:
+          <span class="text-blue-600 font-semibold ml-1">{{
+            selectedUsername$.value
+          }}</span>
+        </p>
+      </div>
     </div>
   </div>
 
-  <!-- Second row with 8-4 split -->
-  <div class="grid grid-cols-12 gap-4 mb-4">
-    <div class="col-span-12 lg:col-span-8">
-      <app-weekly-performance-chart
-        [workouts]="workouts"
-      ></app-weekly-performance-chart>
+  <!-- Content area -->
+  <div class="flex-1" *ngIf="filteredWorkouts$ | async as filteredWorkouts">
+    <!-- First row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+      <div
+        class="bg-white rounded-lg shadow-md transition-transform hover:translate-y-[-2px]"
+      >
+        <app-streak-card [workouts]="filteredWorkouts"></app-streak-card>
+      </div>
+      <div
+        class="bg-white rounded-lg shadow-md transition-transform hover:translate-y-[-2px]"
+      >
+        <app-most-active-exercise-card
+          [workouts]="filteredWorkouts"
+        ></app-most-active-exercise-card>
+      </div>
+      <div
+        class="bg-white rounded-lg shadow-md transition-transform hover:translate-y-[-2px]"
+      >
+        <app-weekly-progress-card
+          [workouts]="filteredWorkouts"
+        ></app-weekly-progress-card>
+      </div>
+      <div
+        class="bg-white rounded-lg shadow-md transition-transform hover:translate-y-[-2px]"
+      >
+        <app-calories-summary-card
+          [workouts]="filteredWorkouts"
+        ></app-calories-summary-card>
+      </div>
     </div>
-    <div class="col-span-12 lg:col-span-4">
-      <app-workout-distribution-chart
-        [workouts]="workouts"
-      ></app-workout-distribution-chart>
-    </div>
-  </div>
 
-  <!-- Third row with 4-8 split -->
-  <div class="grid grid-cols-12 gap-4">
-    <div class="col-span-12 lg:col-span-4">
-      <app-mood-summary-card [workouts]="workouts"></app-mood-summary-card>
+    <!-- Second row -->
+    <div class="grid grid-cols-12 gap-4 mb-4">
+      <div class="col-span-12 lg:col-span-8 bg-white rounded-lg shadow-md">
+        <app-weekly-performance-chart
+          [workouts]="filteredWorkouts"
+        ></app-weekly-performance-chart>
+      </div>
+      <div class="col-span-12 lg:col-span-4 bg-white rounded-lg shadow-md">
+        <app-workout-distribution-chart
+          [workouts]="filteredWorkouts"
+        ></app-workout-distribution-chart>
+      </div>
     </div>
-    <div class="col-span-12 lg:col-span-8">
-      <app-weekly-activity-overview
-        [workouts]="workouts"
-      ></app-weekly-activity-overview>
+
+    <!-- Third row -->
+    <div class="grid grid-cols-12 gap-4">
+      <div class="col-span-12 lg:col-span-4 bg-white rounded-lg shadow-md">
+        <app-mood-summary-card
+          [workouts]="filteredWorkouts"
+        ></app-mood-summary-card>
+      </div>
+      <div class="col-span-12 lg:col-span-8 bg-white rounded-lg shadow-md">
+        <app-weekly-activity-overview
+          [workouts]="filteredWorkouts"
+        ></app-weekly-activity-overview>
+      </div>
     </div>
   </div>
 </div>

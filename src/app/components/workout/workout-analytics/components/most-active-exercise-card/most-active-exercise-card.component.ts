@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
@@ -11,20 +11,19 @@ interface ExerciseSummary {
 
 @Component({
   selector: 'app-most-active-exercise-card',
+  standalone: true,
   imports: [CommonModule, CardModule, TagModule],
   templateUrl: './most-active-exercise-card.component.html',
   styleUrl: './most-active-exercise-card.component.scss',
 })
-export class MostActiveExerciseCardComponent {
+export class MostActiveExerciseCardComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
   mostActiveExercise: string = '';
   exerciseDuration: string = '';
 
-  ngOnInit() {
-    if (this.workouts.length) {
-      this.calculateMostActiveExercise();
-    }
+  ngOnChanges() {
+    this.calculateMostActiveExercise();
   }
 
   private calculateMostActiveExercise(): void {
@@ -33,14 +32,10 @@ export class MostActiveExerciseCardComponent {
     weekStart.setDate(currentDate.getDate() - currentDate.getDay());
     weekStart.setHours(0, 0, 0, 0);
 
-    // Filter workouts for current week
+    // Filter workouts for current week - removed username filter
     const weeklyWorkouts = this.workouts.filter((workout) => {
       const workoutDate = new Date(workout.date);
-      return (
-        workoutDate >= weekStart &&
-        workoutDate <= currentDate &&
-        workout.username === 'John Doe'
-      );
+      return workoutDate >= weekStart && workoutDate <= currentDate;
     });
 
     // Group and sum minutes by workout type
@@ -62,6 +57,9 @@ export class MostActiveExerciseCardComponent {
 
       this.mostActiveExercise = mostActive.type;
       this.exerciseDuration = this.formatDuration(mostActive.totalMinutes);
+    } else {
+      this.mostActiveExercise = '';
+      this.exerciseDuration = '';
     }
   }
 

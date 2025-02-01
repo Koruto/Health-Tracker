@@ -1,5 +1,4 @@
-//components/workout-analytics/components/workout-metrics-summary/workout-metrics-summary.component.ts
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
@@ -11,7 +10,7 @@ import { Workout } from '@interfaces/workout';
   imports: [CommonModule, CardModule, ChartModule],
   templateUrl: './weekly-performance-chart.component.html',
 })
-export class WeeklyPerformanceChartComponent implements OnInit {
+export class WeeklyPerformanceChartComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
   chartData: any;
@@ -23,7 +22,7 @@ export class WeeklyPerformanceChartComponent implements OnInit {
   readonly WHO_WEEKLY_MINUTES = 150;
   readonly WHO_VIGOROUS_MINUTES = 75;
 
-  ngOnInit() {
+  ngOnChanges() {
     this.calculateWeeklyMetrics();
   }
 
@@ -39,13 +38,10 @@ export class WeeklyPerformanceChartComponent implements OnInit {
     // Set week range
     this.weekRange = `${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`;
 
+    // Remove username filter as it's handled by parent
     const weeklyWorkouts = this.workouts.filter((workout) => {
       const workoutDate = new Date(workout.date);
-      return (
-        workoutDate >= weekStart &&
-        workoutDate <= currentDate &&
-        workout.username === 'John Doe'
-      );
+      return workoutDate >= weekStart && workoutDate <= currentDate;
     });
 
     // Process daily data

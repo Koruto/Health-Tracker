@@ -6,9 +6,9 @@ import { Workout } from '@interfaces/workout';
 
 @Component({
   selector: 'app-calories-summary-card',
+  standalone: true,
   imports: [CommonModule, CardModule, TagModule],
   templateUrl: './calories-summary-card.component.html',
-  styleUrl: './calories-summary-card.component.scss',
 })
 export class CaloriesSummaryCardComponent implements OnInit {
   @Input() workouts: Workout[] = [];
@@ -22,6 +22,10 @@ export class CaloriesSummaryCardComponent implements OnInit {
     }
   }
 
+  ngOnChanges() {
+    this.calculateCalorieStats();
+  }
+
   private calculateCalorieStats(): void {
     const currentDate = new Date();
     const weekStart = new Date(currentDate);
@@ -30,11 +34,7 @@ export class CaloriesSummaryCardComponent implements OnInit {
 
     const weeklyWorkouts = this.workouts.filter((workout) => {
       const workoutDate = new Date(workout.date);
-      return (
-        workoutDate >= weekStart &&
-        workoutDate <= currentDate &&
-        workout.username === 'John Doe'
-      );
+      return workoutDate >= weekStart && workoutDate <= currentDate;
     });
 
     // Calculate total calories
@@ -48,7 +48,7 @@ export class CaloriesSummaryCardComponent implements OnInit {
       weeklyWorkouts.map((workout) => new Date(workout.date).toDateString())
     );
 
-    // Calculate daily average (if there are workout days)
+    // Calculate daily average
     const activeDays = uniqueDays.size;
     this.dailyAverage =
       activeDays > 0 ? Math.round(this.totalCalories / activeDays) : 0;

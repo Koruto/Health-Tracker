@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { Workout } from '@interfaces/workout';
 import { CommonModule } from '@angular/common';
@@ -11,24 +11,26 @@ import { DividerModule } from 'primeng/divider';
   templateUrl: './streak-card.component.html',
   styleUrl: './streak-card.component.scss',
 })
-export class StreakCardComponent {
+export class StreakCardComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
   currentStreak: number = 0;
   bestStreak: number = 0;
 
-  ngOnInit() {
-    if (this.workouts.length) {
-      this.calculateStreaks();
-    }
+  ngOnChanges() {
+    this.calculateStreaks();
   }
 
   private calculateStreaks() {
-    // Filter workouts for John Doe and sort by date
-    const userWorkouts = this.workouts
-      .filter((workout) => workout.username === 'John Doe')
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    // Remove username filter as it's handled by parent
+    const userWorkouts = this.workouts.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
 
-    if (!userWorkouts.length) return;
+    if (!userWorkouts.length) {
+      this.currentStreak = 0;
+      this.bestStreak = 0;
+      return;
+    }
 
     // Calculate current streak
     this.currentStreak = this.getCurrentStreak(userWorkouts);
@@ -68,7 +70,6 @@ export class StreakCardComponent {
       }
     }
 
-    // Add 1 for the current day
     return streak + 1;
   }
 

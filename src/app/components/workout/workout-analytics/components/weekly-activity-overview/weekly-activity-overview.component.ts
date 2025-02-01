@@ -1,5 +1,4 @@
-//components/workout-analytics/components/weekly-activity-overview/weekly-activity-overview.component.ts
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
@@ -29,7 +28,7 @@ interface DailyWorkout {
   ],
   templateUrl: './weekly-activity-overview.component.html',
 })
-export class WeeklyActivityOverviewComponent implements OnInit {
+export class WeeklyActivityOverviewComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
   chartData: any;
@@ -56,7 +55,7 @@ export class WeeklyActivityOverviewComponent implements OnInit {
     this.maxDate = new Date();
   }
 
-  ngOnInit() {
+  ngOnChanges() {
     this.processWeeklyData();
   }
 
@@ -84,15 +83,11 @@ export class WeeklyActivityOverviewComponent implements OnInit {
       .fill(null)
       .map(() => []);
 
-    // Group workouts by day
+    // Group workouts by day - removed username filter
     this.workouts
       .filter((workout) => {
         const workoutDate = new Date(workout.date);
-        return (
-          workoutDate >= weekStart &&
-          workoutDate <= weekEnd &&
-          workout.username === 'John Doe'
-        );
+        return workoutDate >= weekStart && workoutDate <= weekEnd;
       })
       .forEach((workout) => {
         const dayIndex = new Date(workout.date).getDay();

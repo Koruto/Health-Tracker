@@ -1,5 +1,4 @@
-//components/workout-analytics/components/mood-summary-card/mood-summary-card.component.ts
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
@@ -11,7 +10,7 @@ import { Workout } from '@interfaces/workout';
   imports: [CommonModule, CardModule, TagModule],
   templateUrl: './mood-summary-card.component.html',
 })
-export class MoodSummaryCardComponent implements OnInit {
+export class MoodSummaryCardComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
   avgMood: number = 0;
@@ -29,17 +28,15 @@ export class MoodSummaryCardComponent implements OnInit {
     { min: 4, max: 5, emoji: '😄', label: 'Excellent', color: 'bg-green-500' },
   ];
 
-  ngOnInit() {
-    if (this.workouts.length) {
-      this.calculateMoodMetrics();
-    }
+  ngOnChanges() {
+    this.calculateMoodMetrics();
   }
 
   private calculateMoodMetrics(): void {
-    // Get workouts for John Doe and sort by date
-    const userWorkouts = this.workouts
-      .filter((workout) => workout.username === 'John Doe')
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    // Remove username filter since it's handled by parent
+    const userWorkouts = this.workouts.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
 
     if (userWorkouts.length === 0) {
       this.setMoodDisplay(0);
@@ -53,7 +50,6 @@ export class MoodSummaryCardComponent implements OnInit {
 
     // Calculate mood trend
     if (userWorkouts.length >= 2) {
-      // Split workouts into two halves
       const midPoint = Math.floor(userWorkouts.length / 2);
       const firstHalf = userWorkouts.slice(0, midPoint);
       const secondHalf = userWorkouts.slice(midPoint);
