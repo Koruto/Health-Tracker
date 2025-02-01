@@ -1,16 +1,11 @@
 import { Component } from '@angular/core';
 
-import { WorkoutFormComponent } from '../../workout/workout-form/workout-form.component';
-import { WorkoutListComponent } from '../../workout/workout-list/workout-list.component';
 import { WorkoutAnalyticsComponent } from '../../workout/workout-analytics/workout-analytics.component';
+import { WorkoutManagementComponent } from '../../workout/workout-management/workout-management.component';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [
-    WorkoutFormComponent,
-    WorkoutListComponent,
-    WorkoutAnalyticsComponent,
-  ],
+  imports: [WorkoutAnalyticsComponent, WorkoutManagementComponent],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
 })

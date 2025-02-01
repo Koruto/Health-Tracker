@@ -4,4 +4,8 @@ export interface Workout {
   workoutType: string;
   minutes: number;
   date: Date;
+  intensity: string;
+  calories: number;
+  mood: number;
+  day: string;
 }

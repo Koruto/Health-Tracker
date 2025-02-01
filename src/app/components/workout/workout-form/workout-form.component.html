@@ -1,38 +1,86 @@
-<p-card header="Add Workout">
-  <form [formGroup]="workoutForm" (ngSubmit)="onSubmit()">
-    <div class="p-fluid">
-      <div class="field">
-        <label for="username">User Name</label>
-        <input pInputText id="username" formControlName="username" />
-      </div>
+<div class="card flex justify-center">
+  <p-button (click)="showDialog()" label="Add Workout" />
+  <p-dialog
+    header="Add Workout"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '30rem' }"
+  >
+    <form [formGroup]="workoutForm" (ngSubmit)="onSubmit()">
+      <div class="p-fluid">
+        <div class="field flex items-center gap-4 mb-4">
+          <label for="username" class="font-semibold w-26">User Name</label>
+          <input
+            pInputText
+            id="username"
+            class="flex-auto"
+            formControlName="username"
+          />
+        </div>
 
-      <div class="field">
-        <label for="workoutType">Workout Type</label>
-        <p-select
-          id="workoutType"
-          [options]="workoutTypes"
-          formControlName="workoutType"
-          optionLabel="name"
-          placeholder="Select a Workout Type"
-          [style]="{ width: '100%' }"
-        ></p-select>
-      </div>
+        <div class="field flex items-center gap-4 mb-4">
+          <label for="date" class="font-semibold w-26">Date</label>
+          <p-calendar
+            id="date"
+            formControlName="date"
+            [showIcon]="true"
+            class="flex-auto"
+          ></p-calendar>
+        </div>
 
-      <div class="field">
-        <label for="minutes">Minutes</label>
-        <input
-          type="number"
-          pInputText
-          id="minutes"
-          formControlName="minutes"
-        />
-      </div>
+        <div class="field flex items-center gap-4 mb-4">
+          <label for="workoutType" class="font-semibold w-26"
+            >Workout Type</label
+          >
+          <p-select
+            id="workoutType"
+            [options]="workoutTypes"
+            formControlName="workoutType"
+            optionLabel="name"
+            optionValue="value"
+            placeholder="Select a Workout Type"
+            class="flex-auto"
+          ></p-select>
+        </div>
 
-      <p-button
-        type="submit"
-        label="Add Workout"
-        [disabled]="workoutForm.invalid"
-      ></p-button>
-    </div>
-  </form>
-</p-card>
+        <div class="field flex items-center gap-4 mb-4">
+          <label for="intensity" class="font-semibold w-26">Intensity</label>
+          <p-select
+            id="intensity"
+            [options]="intensityLevels"
+            formControlName="intensity"
+            optionLabel="name"
+            optionValue="value"
+            placeholder="Select Intensity Level"
+            class="flex-auto"
+          ></p-select>
+        </div>
+
+        <div class="field flex items-center gap-4 mb-4">
+          <label for="minutes" class="font-semibold w-26">Minutes</label>
+          <input
+            type="number"
+            pInputText
+            id="minutes"
+            class="flex-auto"
+            formControlName="minutes"
+          />
+        </div>
+
+        <div class="field flex items-center gap-4 mb-4">
+          <label for="mood" class="font-semibold w-26">Mood (1-5)</label>
+          <div class="flex-auto">
+            <p-rating id="mood" formControlName="mood" [stars]="5"></p-rating>
+          </div>
+        </div>
+
+        <p-button
+          type="submit"
+          label="Add Workout"
+          class="flex justify-center"
+          [disabled]="workoutForm.invalid"
+        ></p-button>
+      </div>
+    </form>
+  </p-dialog>
+</div>
