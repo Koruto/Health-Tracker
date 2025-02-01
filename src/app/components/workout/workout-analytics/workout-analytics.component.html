@@ -1,1 +1,50 @@
-<p>workout-analytics works!</p>
+<!-- workout-analytics.component.html -->
+<div class="p-4">
+  <!-- First row with 4 equal columns -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+    <div class="col-span-1">
+      <app-streak-card [workouts]="workouts"></app-streak-card>
+    </div>
+    <div class="col-span-1">
+      <app-most-active-exercise-card
+        [workouts]="workouts"
+      ></app-most-active-exercise-card>
+    </div>
+    <div class="col-span-1">
+      <app-weekly-progress-card
+        [workouts]="workouts"
+      ></app-weekly-progress-card>
+    </div>
+    <div class="col-span-1">
+      <app-calories-summary-card
+        [workouts]="workouts"
+      ></app-calories-summary-card>
+    </div>
+  </div>
+
+  <!-- Second row with 8-4 split -->
+  <div class="grid grid-cols-12 gap-4 mb-4">
+    <div class="col-span-12 lg:col-span-8">
+      <app-weekly-performance-chart
+        [workouts]="workouts"
+      ></app-weekly-performance-chart>
+    </div>
+    <div class="col-span-12 lg:col-span-4">
+      <app-workout-distribution-chart
+        [workouts]="workouts"
+      ></app-workout-distribution-chart>
+    </div>
+  </div>
+
+  <!-- Third row with 4-8 split -->
+  <div class="grid grid-cols-12 gap-4">
+    <div class="col-span-12 lg:col-span-4">
+      <app-mood-summary-card [workouts]="workouts"></app-mood-summary-card>
+    </div>
+    <div class="col-span-12 lg:col-span-8">
+      <app-weekly-activity-overview
+        [workouts]="workouts"
+      ></app-weekly-activity-overview>
+    </div>
+  </div>
+</div>

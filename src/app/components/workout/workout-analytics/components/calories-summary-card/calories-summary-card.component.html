@@ -1,0 +1,25 @@
+<p-card>
+  <div class="flex flex-col items-center justify-between min-h-[200px] p-4">
+    <div class="flex flex-col items-center">
+      <i class="pi pi-fire text-2xl text-orange-500 mb-2"></i>
+      <h3 class="text-lg font-medium text-gray-700">Calories Burned</h3>
+    </div>
+
+    <div class="flex flex-col items-center justify-center py-4 text-center">
+      <span class="text-4xl font-bold text-primary-500 mb-2">{{
+        formatNumber(totalCalories)
+      }}</span>
+      <span class="text-sm text-gray-600">This Week</span>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <p-tag
+        [value]="formatNumber(dailyAverage) + ' cal/day'"
+        [rounded]="true"
+        class="text-sm font-medium"
+      >
+      </p-tag>
+      <span class="text-sm text-gray-500">Daily Average</span>
+    </div>
+  </div>
+</p-card>

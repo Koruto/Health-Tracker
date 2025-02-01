@@ -1,0 +1,49 @@
+<p-card>
+  <div class="flex gap-4">
+    <!-- Main Chart Section -->
+    <div class="flex-1">
+      <div class="mb-2">
+        <h3 class="text-lg font-medium text-gray-700">Workout Metrics</h3>
+        <p class="text-sm text-gray-500">{{ weekRange }}</p>
+      </div>
+
+      <div class="h-64">
+        <p-chart type="bar" [data]="chartData" [options]="chartOptions">
+        </p-chart>
+      </div>
+    </div>
+
+    <!-- WHO Targets Side Section -->
+    <div class="w-48 flex flex-col justify-center gap-4">
+      <!-- Weekly Target Progress -->
+      <div>
+        <div class="flex justify-between text-sm text-gray-600 mb-1">
+          <span>Weekly Target</span>
+          <span>{{ weeklyProgress }}%</span>
+        </div>
+        <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div
+            class="h-full rounded-full transition-all duration-300"
+            [class]="getProgressColorClass(weeklyProgress)"
+            [style.width.%]="weeklyProgress"
+          ></div>
+        </div>
+      </div>
+
+      <!-- High Intensity Progress -->
+      <div>
+        <div class="flex justify-between text-sm text-gray-600 mb-1">
+          <span>High Intensity</span>
+          <span>{{ intensityProgress }}%</span>
+        </div>
+        <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div
+            class="h-full rounded-full transition-all duration-300"
+            [class]="getProgressColorClass(intensityProgress)"
+            [style.width.%]="intensityProgress"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-card>
