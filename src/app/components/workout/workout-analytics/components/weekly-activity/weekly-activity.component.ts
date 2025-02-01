@@ -16,7 +16,7 @@ interface DailyWorkout {
 }
 
 @Component({
-  selector: 'app-weekly-activity-overview',
+  selector: 'app-weekly-activity',
   standalone: true,
   imports: [
     CommonModule,
@@ -26,16 +26,14 @@ interface DailyWorkout {
     ButtonModule,
     FormsModule,
   ],
-  templateUrl: './weekly-activity-overview.component.html',
+  templateUrl: './weekly-activity.component.html',
 })
-export class WeeklyActivityOverviewComponent implements OnChanges {
+export class WeeklyActivityComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
   chartData: any;
   chartOptions: any;
-  selectedDate: Date = new Date();
-  minDate: Date;
-  maxDate: Date;
+  weekRange: string = '';
 
   private readonly workoutColors = {
     [WorkoutType.HIIT]: 'rgba(255, 99, 132, 0.8)',
@@ -46,44 +44,39 @@ export class WeeklyActivityOverviewComponent implements OnChanges {
     [WorkoutType.Rest]: 'rgba(232, 244, 248, 0.8)',
   };
 
-  constructor() {
-    // Set minDate to 6 months ago
-    this.minDate = new Date();
-    this.minDate.setMonth(this.minDate.getMonth() - 6);
+  // Calculate default week range
+  private calculateDefaultWeekRange() {
+    const currentDate = new Date();
+    currentDate.setHours(23, 59, 59, 999); // Set to end of day
 
-    // Set maxDate to today
-    this.maxDate = new Date();
+    const sevenDaysAgo = new Date(currentDate);
+    sevenDaysAgo.setDate(currentDate.getDate() - 6); // Change to -6 to include today
+    sevenDaysAgo.setHours(0, 0, 0, 0);
+
+    return { start: sevenDaysAgo, end: currentDate };
   }
 
   ngOnChanges() {
     this.processWeeklyData();
   }
 
-  getWeekRange(): string {
-    const weekStart = new Date(this.selectedDate);
-    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-
-    const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekEnd.getDate() + 6);
-
-    return `${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`;
-  }
-
   private processWeeklyData(): void {
-    const weekStart = new Date(this.selectedDate);
-    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-    weekStart.setHours(0, 0, 0, 0);
+    const { start: weekStart, end: weekEnd } = this.calculateDefaultWeekRange();
 
-    const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekEnd.getDate() + 6);
-    weekEnd.setHours(23, 59, 59, 999);
+    this.weekRange = `${weekStart.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    })} - ${weekEnd.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    })}`;
 
     // Initialize array for each day
     const dailyWorkouts: DailyWorkout[][] = Array(7)
       .fill(null)
       .map(() => []);
 
-    // Group workouts by day - removed username filter
+    // Group workouts by day
     this.workouts
       .filter((workout) => {
         const workoutDate = new Date(workout.date);

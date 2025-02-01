@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { Workout } from '@interfaces/workout';
+import { Ripple } from 'primeng/ripple';
 
 interface ExerciseSummary {
   type: string;
@@ -12,7 +13,7 @@ interface ExerciseSummary {
 @Component({
   selector: 'app-most-active-exercise-card',
   standalone: true,
-  imports: [CommonModule, CardModule, TagModule],
+  imports: [CommonModule, CardModule, TagModule, Ripple],
   templateUrl: './most-active-exercise-card.component.html',
   styleUrl: './most-active-exercise-card.component.scss',
 })
@@ -20,7 +21,6 @@ export class MostActiveExerciseCardComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
   mostActiveExercise: string = '';
-  exerciseDuration: string = '';
 
   ngOnChanges() {
     this.calculateMostActiveExercise();
@@ -56,20 +56,8 @@ export class MostActiveExerciseCardComponent implements OnChanges {
       );
 
       this.mostActiveExercise = mostActive.type;
-      this.exerciseDuration = this.formatDuration(mostActive.totalMinutes);
     } else {
       this.mostActiveExercise = '';
-      this.exerciseDuration = '';
     }
-  }
-
-  private formatDuration(minutes: number): string {
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-
-    if (hours === 0) return `${remainingMinutes}m`;
-    return remainingMinutes > 0
-      ? `${hours}h ${remainingMinutes}m`
-      : `${hours}h`;
   }
 }

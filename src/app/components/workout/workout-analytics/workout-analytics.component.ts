@@ -6,12 +6,12 @@ import { WorkoutService } from '../../../services/workout.service';
 import { Workout } from '../../../interfaces/workout';
 import { StreakCardComponent } from './components/streak-card/streak-card.component';
 import { MostActiveExerciseCardComponent } from './components/most-active-exercise-card/most-active-exercise-card.component';
-import { WeeklyProgressCardComponent } from './components/weekly-progress-card/weekly-progress-card.component';
+import { TotalActivitiesCardComponent } from './components/total-activities-card/total-activities-card.component';
 import { CaloriesSummaryCardComponent } from './components/calories-summary-card/calories-summary-card.component';
 import { WeeklyPerformanceChartComponent } from './components/weekly-performance-chart/weekly-performance-chart.component';
 import { WorkoutDistributionComponent } from './components/workout-distribution-chart/workout-distribution-chart.component';
 import { MoodSummaryCardComponent } from './components/mood-summary-card/mood-summary-card.component';
-import { WeeklyActivityOverviewComponent } from './components/weekly-activity-overview/weekly-activity-overview.component';
+import { WeeklyActivityComponent } from './components/weekly-activity/weekly-activity.component';
 
 // PrimeNG Imports
 import { ListboxModule } from 'primeng/listbox';
@@ -24,12 +24,12 @@ import { CommonModule } from '@angular/common';
   imports: [
     StreakCardComponent,
     MostActiveExerciseCardComponent,
-    WeeklyProgressCardComponent,
+    TotalActivitiesCardComponent,
     CaloriesSummaryCardComponent,
     WeeklyPerformanceChartComponent,
     WorkoutDistributionComponent,
     MoodSummaryCardComponent,
-    WeeklyActivityOverviewComponent,
+    WeeklyActivityComponent,
     ListboxModule,
     FormsModule,
     CommonModule,

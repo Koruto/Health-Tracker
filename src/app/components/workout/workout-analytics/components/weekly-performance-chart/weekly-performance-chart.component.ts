@@ -15,12 +15,7 @@ export class WeeklyPerformanceChartComponent implements OnChanges {
 
   chartData: any;
   chartOptions: any;
-  weeklyProgress: number = 0;
-  intensityProgress: number = 0;
   weekRange: string = '';
-
-  readonly WHO_WEEKLY_MINUTES = 150;
-  readonly WHO_VIGOROUS_MINUTES = 75;
 
   ngOnChanges() {
     this.calculateWeeklyMetrics();
@@ -28,58 +23,63 @@ export class WeeklyPerformanceChartComponent implements OnChanges {
 
   private calculateWeeklyMetrics(): void {
     const currentDate = new Date();
-    const weekStart = new Date(currentDate);
-    weekStart.setDate(currentDate.getDate() - currentDate.getDay());
-    weekStart.setHours(0, 0, 0, 0);
+    currentDate.setHours(23, 59, 59, 999); // Set to end of day
+    const sevenDaysAgo = new Date(currentDate);
+    sevenDaysAgo.setDate(currentDate.getDate() - 6); // Changed from -7 to -6 to include today
+    sevenDaysAgo.setHours(0, 0, 0, 0);
 
-    const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekEnd.getDate() + 6);
+    // Format date range
+    this.weekRange = `${sevenDaysAgo.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    })} - ${currentDate.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    })}`;
 
-    // Set week range
-    this.weekRange = `${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`;
-
-    // Remove username filter as it's handled by parent
+    // Filter workouts for last 7 days
     const weeklyWorkouts = this.workouts.filter((workout) => {
       const workoutDate = new Date(workout.date);
-      return workoutDate >= weekStart && workoutDate <= currentDate;
+      return workoutDate >= sevenDaysAgo && workoutDate <= currentDate;
     });
 
-    // Process daily data
-    const dailyData = Array(7)
-      .fill(0)
-      .map(() => ({ minutes: 0, calories: 0 }));
-    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    // Initialize daily data for the past 7 days
+    const dailyData: { date: Date; minutes: number; calories: number }[] = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(sevenDaysAgo);
+      date.setDate(sevenDaysAgo.getDate() + i);
+      dailyData.push({ date, minutes: 0, calories: 0 });
+    }
 
     let totalMinutes = 0;
     let highIntensityMinutes = 0;
 
+    // Process workout data
     weeklyWorkouts.forEach((workout) => {
-      const day = new Date(workout.date).getDay();
-      dailyData[day].minutes += workout.minutes;
-      dailyData[day].calories += workout.calories;
+      const workoutDate = new Date(workout.date);
+      const dayIndex = dailyData.findIndex(
+        (day) => day.date.toDateString() === workoutDate.toDateString()
+      );
 
-      totalMinutes += workout.minutes;
-      if (workout.intensity === 'High') {
-        highIntensityMinutes += workout.minutes;
+      if (dayIndex !== -1) {
+        dailyData[dayIndex].minutes += workout.minutes;
+        dailyData[dayIndex].calories += workout.calories;
+
+        totalMinutes += workout.minutes;
+        if (workout.intensity === 'High') {
+          highIntensityMinutes += workout.minutes;
+        }
       }
     });
 
-    // Calculate progress percentages
-    this.weeklyProgress = Math.min(
-      Math.round((totalMinutes / this.WHO_WEEKLY_MINUTES) * 100),
-      100
-    );
-    this.intensityProgress = Math.min(
-      Math.round((highIntensityMinutes / this.WHO_VIGOROUS_MINUTES) * 100),
-      100
-    );
-
-    this.initializeChart(dailyData, daysOfWeek);
+    this.initializeChart(dailyData);
   }
 
-  private initializeChart(dailyData: any[], daysOfWeek: string[]): void {
+  private initializeChart(dailyData: any[]): void {
     this.chartData = {
-      labels: daysOfWeek,
+      labels: dailyData.map((d) =>
+        d.date.toLocaleDateString('en-US', { weekday: 'short' })
+      ),
       datasets: [
         {
           type: 'bar',
@@ -89,6 +89,7 @@ export class WeeklyPerformanceChartComponent implements OnChanges {
           backgroundColor: 'rgba(75, 192, 192, 0.5)',
           borderColor: 'rgb(75, 192, 192)',
           borderWidth: 1,
+          order: 1,
         },
         {
           type: 'bar',
@@ -98,13 +99,19 @@ export class WeeklyPerformanceChartComponent implements OnChanges {
           backgroundColor: 'rgba(255, 159, 64, 0.5)',
           borderColor: 'rgb(255, 159, 64)',
           borderWidth: 1,
+          order: 2,
         },
       ],
     };
 
     this.chartOptions = {
       responsive: true,
-      maintainAspectRatio: false,
+      maintainAspectRatio: true,
+      aspectRatio: 3,
+      interaction: {
+        intersect: false,
+        mode: 'index',
+      },
       plugins: {
         legend: {
           position: 'top',
@@ -112,13 +119,27 @@ export class WeeklyPerformanceChartComponent implements OnChanges {
         },
         tooltip: {
           callbacks: {
+            title: (context: any) => {
+              const index = context[0].dataIndex;
+              return dailyData[index].date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'short',
+                day: 'numeric',
+              });
+            },
             label: (context: any) => {
               const dataIndex = context.dataIndex;
-              const minutes = dailyData[dataIndex].minutes;
-              const calories = dailyData[dataIndex].calories;
-              return `Duration: ${minutes} mins | Calories: ${calories}`;
+              const label = context.dataset.label;
+              if (label === 'Calories') {
+                return `Calories: ${dailyData[dataIndex].calories}`;
+              } else {
+                return `Duration: ${dailyData[dataIndex].minutes} minutes`;
+              }
             },
           },
+          displayColors: true,
+          padding: 10,
+          titleMarginBottom: 10,
         },
       },
       scales: {
@@ -143,12 +164,5 @@ export class WeeklyPerformanceChartComponent implements OnChanges {
         },
       },
     };
-  }
-
-  getProgressColorClass(progress: number): string {
-    if (progress >= 100) return 'bg-green-500';
-    if (progress >= 70) return 'bg-primary-500';
-    if (progress >= 40) return 'bg-orange-500';
-    return 'bg-red-500';
   }
 }

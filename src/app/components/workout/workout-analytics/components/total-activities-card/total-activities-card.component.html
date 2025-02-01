@@ -1,22 +1,22 @@
 <div
   class="w-full py-2 bg-white rounded-2xl shadow-sm"
   pRipple
-  style="--p-ripple-background: rgba(52, 211, 153, 0.3)"
+  style="--p-ripple-background: rgba(99, 102, 241, 0.3)"
 >
-  <div class="flex justify-between items-center px-4 py-5">
-    <div class="flex flex-col justify-end">
+  <div class="flex justify-between items-center px-6 py-5">
+    <div class="flex flex-col mr-2">
       <span
         class="text-gray-400 text-xs uppercase tracking-wider font-medium mb-2"
-        >Top Exercise</span
+        >Total Activities</span
       >
       <span class="text-[2.25rem] leading-none font-bold text-gray-900">{{
-        mostActiveExercise
+        currentWeekCount
       }}</span>
     </div>
 
     <img
-      src="/workout.png"
-      alt="Exercise icon"
+      src="/exercise.png"
+      alt="Activity count"
       class="w-16 h-16 object-contain opacity-90"
     />
   </div>

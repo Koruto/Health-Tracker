@@ -3,26 +3,25 @@ import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { Workout } from '@interfaces/workout';
+import { Ripple } from 'primeng/ripple';
 
 @Component({
-  selector: 'app-weekly-progress-card',
+  selector: 'app-total-activities-card',
   standalone: true,
-  imports: [CommonModule, CardModule, TagModule],
-  templateUrl: './weekly-progress-card.component.html',
-  styleUrl: './weekly-progress-card.component.scss',
+  imports: [CommonModule, CardModule, TagModule, Ripple],
+  templateUrl: './total-activities-card.component.html',
+  styleUrl: './total-activities-card.component.scss',
 })
-export class WeeklyProgressCardComponent implements OnChanges {
+export class TotalActivitiesCardComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
   currentWeekCount: number = 0;
-  progressPercentage: number = 0;
-  isPositiveGrowth: boolean = true;
 
   ngOnChanges() {
-    this.calculateWeeklyProgress();
+    this.calculateTotalActivities();
   }
 
-  private calculateWeeklyProgress(): void {
+  private calculateTotalActivities(): void {
     const currentDate = new Date();
 
     // Calculate current week's range
@@ -50,26 +49,5 @@ export class WeeklyProgressCardComponent implements OnChanges {
 
     this.currentWeekCount = currentWeekWorkouts.length;
     const lastWeekCount = lastWeekWorkouts.length;
-
-    // Calculate percentage change
-    if (lastWeekCount === 0) {
-      this.progressPercentage = this.currentWeekCount > 0 ? 100 : 0;
-    } else {
-      this.progressPercentage = Math.round(
-        ((this.currentWeekCount - lastWeekCount) / lastWeekCount) * 100
-      );
-    }
-
-    this.isPositiveGrowth = this.progressPercentage >= 0;
-  }
-
-  getProgressColor(): string {
-    if (this.progressPercentage > 0) return 'text-green-500';
-    if (this.progressPercentage < 0) return 'text-red-500';
-    return 'text-gray-500';
-  }
-
-  getProgressIcon(): string {
-    return this.progressPercentage > 0 ? 'pi pi-arrow-up' : 'pi pi-arrow-down';
   }
 }

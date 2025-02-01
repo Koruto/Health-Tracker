@@ -17,12 +17,12 @@ export class WorkoutDistributionComponent implements OnChanges {
   chartOptions: any;
 
   private readonly colorPalette = [
-    'rgba(54, 162, 235, 0.7)', // Blue
-    'rgba(255, 99, 132, 0.7)', // Red
-    'rgba(75, 192, 192, 0.7)', // Teal
-    'rgba(255, 159, 64, 0.7)', // Orange
-    'rgba(153, 102, 255, 0.7)', // Purple
-    'rgba(255, 205, 86, 0.7)', // Yellow
+    'rgba(79, 166, 255, 0.65)', // Soft Blue
+    'rgba(255, 145, 173, 0.65)', // Soft Pink
+    'rgba(98, 210, 187, 0.65)', // Soft Teal
+    'rgba(255, 178, 115, 0.65)', // Soft Orange
+    'rgba(176, 147, 255, 0.65)', // Soft Purple
+    'rgba(255, 218, 121, 0.65)', // Soft Yellow
   ];
 
   ngOnChanges() {
@@ -30,18 +30,29 @@ export class WorkoutDistributionComponent implements OnChanges {
   }
 
   private processWorkoutData(): void {
-    // Count workouts by type - removed username filter
-    const workoutCounts = this.workouts.reduce((acc, workout) => {
+    // Get date range for last 7 days
+    const currentDate = new Date();
+    currentDate.setHours(23, 59, 59, 999);
+    const sevenDaysAgo = new Date(currentDate);
+    sevenDaysAgo.setDate(currentDate.getDate() - 6); // Changed from -7 to -6 to include today
+    sevenDaysAgo.setHours(0, 0, 0, 0);
+
+    // Filter workouts for last 7 days
+    const recentWorkouts = this.workouts.filter((workout) => {
+      const workoutDate = new Date(workout.date);
+      return workoutDate >= sevenDaysAgo && workoutDate <= currentDate;
+    });
+
+    // Count workouts by type
+    const workoutCounts = recentWorkouts.reduce((acc, workout) => {
       acc[workout.workoutType] = (acc[workout.workoutType] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
-    // Convert to array and ensure all workout types have values
-    const workoutTypes = [...new Set(this.workouts.map((w) => w.workoutType))];
-    const sortedWorkouts = workoutTypes.map((type) => ({
-      type,
-      count: workoutCounts[type] || 0,
-    }));
+    // Sort workout types by count (descending)
+    const sortedWorkouts = Object.entries(workoutCounts)
+      .map(([type, count]) => ({ type, count }))
+      .sort((a, b) => b.count - a.count);
 
     // Prepare chart data
     this.chartData = {
@@ -51,7 +62,7 @@ export class WorkoutDistributionComponent implements OnChanges {
           data: sortedWorkouts.map((w) => w.count),
           backgroundColor: this.colorPalette.slice(0, sortedWorkouts.length),
           borderColor: this.colorPalette.map((color) =>
-            color.replace('0.7', '1')
+            color.replace('0.65', '0.8')
           ),
           borderWidth: 1,
         },
@@ -59,12 +70,29 @@ export class WorkoutDistributionComponent implements OnChanges {
     };
 
     this.chartOptions = {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1.26,
       plugins: {
         legend: {
-          position: 'right',
-          align: 'start',
+          position: 'bottom',
+          align: 'center',
+          labels: {
+            padding: 15,
+            usePointStyle: true,
+            pointStyle: 'circle',
+            color: '#64748b', // slate-500
+            font: {
+              size: 12,
+            },
+          },
         },
         tooltip: {
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          titleColor: '#334155', // slate-700
+          bodyColor: '#64748b', // slate-500
+          padding: 12,
+          boxPadding: 6,
           callbacks: {
             label: (context: any) => {
               const label = context.label || '';
@@ -74,7 +102,7 @@ export class WorkoutDistributionComponent implements OnChanges {
                 0
               );
               const percentage = ((value / total) * 100).toFixed(1);
-              return `${label}: ${value} times (${percentage}%)`;
+              return `${label}: ${value} workouts (${percentage}%)`;
             },
           },
         },
@@ -86,7 +114,12 @@ export class WorkoutDistributionComponent implements OnChanges {
             stepSize: 1,
           },
           grid: {
-            color: 'rgba(0, 0, 0, 0.05)',
+            color: 'rgba(0, 0, 0, 0.03)',
+            lineWidth: 1,
+          },
+          angleLines: {
+            color: 'rgba(0, 0, 0, 0.03)',
+            lineWidth: 1,
           },
         },
       },

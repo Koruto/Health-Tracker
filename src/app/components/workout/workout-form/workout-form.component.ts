@@ -55,11 +55,18 @@ export class WorkoutFormComponent {
   ];
 
   visible: boolean = false;
+  todaysDate: Date | undefined;
+  maxDate: Date | undefined;
+
+  ngOnInit() {
+    this.todaysDate = new Date();
+    this.maxDate = new Date();
+  }
 
   showDialog() {
     this.visible = true;
     this.workoutForm.reset({
-      date: new Date(),
+      date: this.todaysDate,
       minutes: 1,
       mood: 0,
     });

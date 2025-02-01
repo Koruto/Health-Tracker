@@ -1,20 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
-import { TagModule } from 'primeng/tag';
 import { Workout } from '@interfaces/workout';
+import { Ripple } from 'primeng/ripple';
 
 @Component({
   selector: 'app-calories-summary-card',
   standalone: true,
-  imports: [CommonModule, CardModule, TagModule],
+  imports: [CommonModule, CardModule, Ripple],
   templateUrl: './calories-summary-card.component.html',
 })
 export class CaloriesSummaryCardComponent implements OnInit {
   @Input() workouts: Workout[] = [];
-
   totalCalories: number = 0;
-  dailyAverage: number = 0;
 
   ngOnInit() {
     if (this.workouts.length) {
@@ -28,33 +26,27 @@ export class CaloriesSummaryCardComponent implements OnInit {
 
   private calculateCalorieStats(): void {
     const currentDate = new Date();
-    const weekStart = new Date(currentDate);
-    weekStart.setDate(currentDate.getDate() - currentDate.getDay());
-    weekStart.setHours(0, 0, 0, 0);
+    const sevenDaysAgo = new Date(currentDate);
+    sevenDaysAgo.setDate(currentDate.getDate() - 7);
+    sevenDaysAgo.setHours(0, 0, 0, 0);
 
     const weeklyWorkouts = this.workouts.filter((workout) => {
       const workoutDate = new Date(workout.date);
-      return workoutDate >= weekStart && workoutDate <= currentDate;
+      return workoutDate >= sevenDaysAgo && workoutDate <= currentDate;
     });
 
-    // Calculate total calories
+    console.log(this.workouts, weeklyWorkouts);
+
     this.totalCalories = weeklyWorkouts.reduce(
       (sum, workout) => sum + workout.calories,
       0
     );
-
-    // Calculate unique days with workouts
-    const uniqueDays = new Set(
-      weeklyWorkouts.map((workout) => new Date(workout.date).toDateString())
-    );
-
-    // Calculate daily average
-    const activeDays = uniqueDays.size;
-    this.dailyAverage =
-      activeDays > 0 ? Math.round(this.totalCalories / activeDays) : 0;
   }
 
-  formatNumber(num: number): string {
-    return num.toLocaleString('en-US');
+  formatCalories(): string {
+    if (this.totalCalories >= 1000) {
+      return (this.totalCalories / 1000).toFixed(1) + ' kcal';
+    }
+    return this.totalCalories + ' cal';
   }
 }
