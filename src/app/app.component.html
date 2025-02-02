@@ -8,9 +8,12 @@
     -moz-osx-font-smoothing: grayscale;
   }
 </style>
-
 <div class="flex h-screen w-full">
-  <app-sidebar></app-sidebar>
+  <div class="flex-none">
+    <app-sidebar></app-sidebar>
+  </div>
 
-  <app-main-layout></app-main-layout>
+  <div class="flex-1">
+    <app-main-layout></app-main-layout>
+  </div>
 </div>

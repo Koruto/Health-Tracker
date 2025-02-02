@@ -35,13 +35,12 @@
     [totalRecords]="totalRecords"
     [showCurrentPageReport]="true"
     [rowsPerPageOptions]="[5, 10, 25, 50]"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} workouts"
+    currentPageReportTemplate="{first}-{last} of {totalRecords} workouts"
     styleClass="p-datatable-striped"
-    tableStyleClass="min-w-[70rem]"
     rowGroupMode="rowspan"
     groupRowsBy="username"
     [scrollable]="true"
-    scrollHeight="440px"
+    [scrollHeight]="'calc(100vh - 300px)'"
     resetPageOnSort="false"
   >
     <ng-template pTemplate="caption">
@@ -109,16 +108,16 @@
 
     <ng-template pTemplate="header">
       <tr>
-        <th style="width: 5%">#</th>
-        <th pSortableColumn="username" style="width: 15%">
+        <th class="w-[5%]">#</th>
+        <th pSortableColumn="username" class="w-[15%]">
           Username <p-sortIcon field="username" />
         </th>
-        <th style="width: 15%">Date</th>
-        <th style="width: 12%">Workout Type</th>
-        <th style="width: 10%">Intensity</th>
-        <th style="width: 10%">Minutes</th>
-        <th style="width: 10%">Calories</th>
-        <th style="width: 10%">Mood</th>
+        <th class="w-[15%]">Date</th>
+        <th class="w-[12%]">Workout Type</th>
+        <th class="w-[10%]">Intensity</th>
+        <th class="w-[10%]">Minutes</th>
+        <th class="w-[10%]">Calories</th>
+        <th class="w-[10%]">Mood</th>
       </tr>
     </ng-template>
 
@@ -130,37 +129,56 @@
       let-rowspan="rowspan"
     >
       <tr>
-        <td>{{ rowIndex + 1 }}</td>
+        <td class="whitespace-nowrap">{{ rowIndex + 1 }}</td>
         <td
           *ngIf="rowgroup"
           [attr.rowspan]="rowspan"
-          class="bg-gray-50 font-semibold"
+          class="bg-gray-50 font-semibold whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]"
+          [pTooltip]="workout.username"
+          [tooltipDisabled]="workout.username.length <= 20"
         >
           {{ workout.username }}
         </td>
-        <td>{{ workout.date | date : "MMM d, y" }}</td>
-        <td>{{ workout.workoutType }}</td>
+        <td class="whitespace-nowrap">
+          {{ workout.date | date : "MMM d, y" }}
+        </td>
+        <td
+          class="whitespace-nowrap overflow-hidden text-ellipsis max-w-[150px]"
+          [pTooltip]="workout.workoutType"
+          [tooltipDisabled]="workout.workoutType.length <= 15"
+        >
+          {{ workout.workoutType }}
+        </td>
         <td>
           <span
             [ngClass]="{
-              'px-3 py-1 rounded-full text-sm font-medium': true,
+              'px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis inline-block max-w-full': true,
               'bg-green-100 text-green-800': workout.intensity === 'Low',
               'bg-yellow-100 text-yellow-800': workout.intensity === 'Medium',
               'bg-red-100 text-red-800': workout.intensity === 'High'
             }"
+            [pTooltip]="workout.intensity"
+            [tooltipDisabled]="workout.intensity.length <= 10"
           >
             {{ workout.intensity }}
           </span>
         </td>
-        <td>{{ workout.minutes }}</td>
-        <td>{{ workout.calories }}</td>
-        <td>
+        <td
+          class="whitespace-nowrap overflow-hidden text-ellipsis"
+          [pTooltip]="workout.minutes"
+          [tooltipDisabled]="workout.minutes.toString().length <= 5"
+        >
+          {{ workout.minutes }}
+        </td>
+        <td
+          class="whitespace-nowrap overflow-hidden text-ellipsis"
+          [pTooltip]="workout.calories"
+          [tooltipDisabled]="workout.calories.toString().length <= 5"
+        >
+          {{ workout.calories }}
+        </td>
+        <td class="whitespace-nowrap">
           <app-mood-donut [value]="workout.mood"></app-mood-donut>
-          <!-- <p-rating
-            [ngModel]="workout.mood"
-            [readonly]="true"
-            [stars]="5"
-          ></p-rating> -->
         </td>
       </tr>
     </ng-template>
