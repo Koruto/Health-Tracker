@@ -24,7 +24,6 @@ export class SidebarComponent {
   ngOnInit() {
     this.subscription.add(
       this.navigationService.activeSection$.subscribe((section) => {
-        console.log('Active section changed:', section); // Debug log
         this.activeSection = section;
         this.cdr.detectChanges();
       })

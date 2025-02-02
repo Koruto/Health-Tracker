@@ -20,14 +20,15 @@
 
         <div class="field flex items-center gap-4 mb-4">
           <label for="date" class="font-semibold w-26">Date</label>
-          <p-calendar
+          <p-datepicker
             id="date"
+            size="small"
             formControlName="date"
             [showIcon]="true"
             class="flex-auto"
             [maxDate]="maxDate"
             dateFormat="M dd, yy"
-          ></p-calendar>
+          ></p-datepicker>
         </div>
 
         <div class="field flex items-center gap-4 mb-5">
@@ -84,7 +85,7 @@
           ></p-inputNumber>
         </div>
 
-        <div class="field flex items-center gap-4 mb-4">
+        <div class="field flex items-center gap-4 mb-6">
           <label for="mood" class="font-semibold w-26">Mood (1-5)</label>
           <div class="flex gap-3 flex-auto">
             <div
@@ -127,7 +128,7 @@
         <p-button
           type="submit"
           label="Add Workout"
-          class="flex justify-center"
+          class="flex justify-center m-5"
           [disabled]="workoutForm.invalid"
         ></p-button>
       </div>

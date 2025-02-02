@@ -79,7 +79,6 @@ export class WorkoutListComponent implements OnInit, OnDestroy {
     // Subscribe to workouts updates
     this.subscription.add(
       this.filteredWorkouts$.subscribe((filtered) => {
-        console.log('Filtered workouts updated:', filtered);
         this.totalRecords = filtered.length;
       })
     );
@@ -157,7 +156,6 @@ export class WorkoutListComponent implements OnInit, OnDestroy {
   private refreshData(): void {
     // Force a new emission from the service
     const currentWorkouts = this.workoutService.getWorkouts();
-    console.log('Refreshing with workouts:', currentWorkouts);
     this.workoutService.refreshWorkouts();
   }
 

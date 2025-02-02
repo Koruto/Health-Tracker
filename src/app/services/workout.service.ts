@@ -1,35 +1,48 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Workout } from '../interfaces/workout';
+import { INITIAL_WORKOUTS } from '../data/initial-workouts';
 
 @Injectable({ providedIn: 'root' })
 export class WorkoutService {
   private storageKey = 'workouts';
-  private workoutsSubject = new BehaviorSubject<Workout[]>(this.loadWorkouts());
-  workouts$ = this.workoutsSubject.asObservable();
 
-  private loadWorkouts(): Workout[] {
-    const workouts = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
-    console.log('Loading workouts from storage:', workouts);
-    return workouts;
+  private workoutsSubject: BehaviorSubject<Workout[]>;
+  workouts$;
+
+  constructor() {
+    // Initialize the subject with either saved or default data
+    const savedData = localStorage.getItem(this.storageKey);
+    const initialData = savedData ? JSON.parse(savedData) : INITIAL_WORKOUTS;
+
+    // If no saved data, save the defaults
+    if (!savedData) {
+      localStorage.setItem(this.storageKey, JSON.stringify(INITIAL_WORKOUTS));
+    }
+
+    this.workoutsSubject = new BehaviorSubject<Workout[]>(initialData);
+    this.workouts$ = this.workoutsSubject.asObservable();
   }
 
   getWorkouts(): Workout[] {
-    return this.workoutsSubject.value;
+    return this.workoutsSubject.getValue();
   }
 
   addWorkout(workout: Workout) {
-    console.log('Adding new workout:', workout);
-    const workouts = this.getWorkouts();
-    workouts.push(workout);
-    localStorage.setItem(this.storageKey, JSON.stringify(workouts));
-    this.workoutsSubject.next(workouts);
-    console.log('Workouts after adding:', workouts);
+    const currentWorkouts = [...this.workoutsSubject.getValue()];
+    currentWorkouts.push(workout);
+    localStorage.setItem(this.storageKey, JSON.stringify(currentWorkouts));
+    this.workoutsSubject.next(currentWorkouts);
   }
 
   refreshWorkouts() {
-    console.log('Refreshing workouts');
-    const workouts = this.loadWorkouts();
+    const savedData = localStorage.getItem(this.storageKey);
+    const workouts = savedData ? JSON.parse(savedData) : INITIAL_WORKOUTS;
     this.workoutsSubject.next(workouts);
+  }
+
+  resetToDefault() {
+    localStorage.setItem(this.storageKey, JSON.stringify(INITIAL_WORKOUTS));
+    this.workoutsSubject.next(INITIAL_WORKOUTS);
   }
 }

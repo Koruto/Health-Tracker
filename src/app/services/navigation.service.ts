@@ -9,7 +9,6 @@ export class NavigationService {
   activeSection$ = this.activeSectionSubject.asObservable();
 
   setActiveSection(section: string) {
-    console.log('Setting active section:', section); // Debug log
     this.activeSectionSubject.next(section);
   }
 

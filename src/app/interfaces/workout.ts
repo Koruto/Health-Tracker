@@ -1,9 +1,8 @@
 export interface Workout {
-  id: string;
   username: string;
   workoutType: string;
   minutes: number;
-  date: Date;
+  date: Date | string;
   intensity: string;
   calories: number;
   mood: number;

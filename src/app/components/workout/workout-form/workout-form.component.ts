@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
@@ -10,13 +10,13 @@ import { CardModule } from 'primeng/card';
 import { Dialog } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
-import { CalendarModule } from 'primeng/calendar';
 import { SliderModule } from 'primeng/slider';
 import { RatingModule } from 'primeng/rating';
 
 import { WorkoutService } from '../../../services/workout.service';
 import { CommonModule } from '@angular/common';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { DatePicker } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-workout-form',
@@ -29,7 +29,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     SelectModule,
     ReactiveFormsModule,
     InputTextModule,
-    CalendarModule,
+    DatePicker,
     SliderModule,
     RatingModule,
     InputNumberModule,
@@ -40,10 +40,14 @@ import { InputNumberModule } from 'primeng/inputnumber';
 export class WorkoutFormComponent {
   workoutForm: FormGroup;
   workoutTypes = [
-    { name: 'Cardio', value: 'Cardio' },
-    { name: 'Strength', value: 'Strength' },
-    { name: 'Yoga', value: 'Yoga' },
-    { name: 'HIIT', value: 'HIIT' },
+    { name: '🏃 Running', value: '🏃 Running' },
+    { name: '🏋️ Weight Training', value: 'Weights' },
+    { name: '🚶 Walking', value: 'Walking' },
+    { name: '🏠 Home Workout', value: 'Home' },
+    { name: '🧘 Yoga', value: 'Yoga' },
+    { name: '🚲 Cycling', value: 'Cycling' },
+    { name: '💪 Gym Session', value: 'Gym' },
+    { name: '⚡ HIIT', value: 'HIIT' },
   ];
 
   intensityLevels = [
@@ -91,10 +95,14 @@ export class WorkoutFormComponent {
   ): number {
     // Base calories per minute for each workout type
     const baseCalories: { [key: string]: number } = {
-      Cardio: 8,
-      Strength: 6,
-      Yoga: 4,
-      HIIT: 10,
+      Running: 10,
+      Weights: 7,
+      Walking: 4,
+      Home: 6,
+      Yoga: 3,
+      Cycling: 8,
+      Gym: 7,
+      HIIT: 12,
     };
 
     // Intensity multipliers
@@ -125,7 +133,6 @@ export class WorkoutFormComponent {
       };
 
       this.workoutService.addWorkout(workout);
-      console.log('Workout added successfully!', workout);
       this.workoutForm.reset();
       this.visible = false;
     }
