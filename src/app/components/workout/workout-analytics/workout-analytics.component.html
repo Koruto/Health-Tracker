@@ -1,6 +1,4 @@
-<div
-  class="flex flex-col lg:flex-row lg:space-x-4 min-h-[700px] overflow-hidden"
->
+<div class="flex flex-col lg:flex-row lg:gap-4 min-h-[700px] overflow-hidden">
   <!-- Username filter section -->
   <div class="w-full lg:w-64 mb-4 lg:mb-0">
     <div class="bg-white shadow-sm rounded-2xl p-4 sticky h-[calc(100%-30px)]">
@@ -20,7 +18,7 @@
             <div
               class="flex items-center px-3 py-2 transition-colors duration-200 rounded-md cursor-pointer mb-1.5 overflow-hidden"
             >
-              <div class="flex items-center space-x-3 min-w-0 w-full">
+              <div class="flex items-center gap-3 min-w-0 w-full">
                 <div
                   [style.background-color]="getAvatarColor(username)"
                   class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-white text-sm font-medium"
@@ -29,7 +27,7 @@
                 </div>
                 <span
                   [class.text-pink-600]="selectedUsername$.value === username"
-                  class="text-sm font-medium text-gray-700 truncate"
+                  class="text-base font-medium text-gray-700 truncate"
                 >
                   {{ username }}
                 </span>
