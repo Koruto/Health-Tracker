@@ -27,19 +27,8 @@ export class MostActiveExerciseCardComponent implements OnChanges {
   }
 
   private calculateMostActiveExercise(): void {
-    const currentDate = new Date();
-    const weekStart = new Date(currentDate);
-    weekStart.setDate(currentDate.getDate() - currentDate.getDay());
-    weekStart.setHours(0, 0, 0, 0);
-
-    // Filter workouts for current week - removed username filter
-    const weeklyWorkouts = this.workouts.filter((workout) => {
-      const workoutDate = new Date(workout.date);
-      return workoutDate >= weekStart && workoutDate <= currentDate;
-    });
-
     // Group and sum minutes by workout type
-    const exerciseSummary = weeklyWorkouts.reduce((acc, workout) => {
+    const exerciseSummary = this.workouts.reduce((acc, workout) => {
       const existing = acc.find((item) => item.type === workout.workoutType);
       if (existing) {
         existing.totalMinutes += workout.minutes;

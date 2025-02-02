@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { map, shareReplay, startWith } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 
 import { WorkoutService } from '../../../services/workout.service';
 import { Workout } from '../../../interfaces/workout';

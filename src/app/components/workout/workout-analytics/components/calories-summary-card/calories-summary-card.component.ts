@@ -25,19 +25,7 @@ export class CaloriesSummaryCardComponent implements OnInit {
   }
 
   private calculateCalorieStats(): void {
-    const currentDate = new Date();
-    const sevenDaysAgo = new Date(currentDate);
-    sevenDaysAgo.setDate(currentDate.getDate() - 7);
-    sevenDaysAgo.setHours(0, 0, 0, 0);
-
-    const weeklyWorkouts = this.workouts.filter((workout) => {
-      const workoutDate = new Date(workout.date);
-      return workoutDate >= sevenDaysAgo && workoutDate <= currentDate;
-    });
-
-    console.log(this.workouts, weeklyWorkouts);
-
-    this.totalCalories = weeklyWorkouts.reduce(
+    this.totalCalories = this.workouts.reduce(
       (sum, workout) => sum + workout.calories,
       0
     );

@@ -22,32 +22,6 @@ export class TotalActivitiesCardComponent implements OnChanges {
   }
 
   private calculateTotalActivities(): void {
-    const currentDate = new Date();
-
-    // Calculate current week's range
-    const currentWeekStart = new Date(currentDate);
-    currentWeekStart.setDate(currentDate.getDate() - currentDate.getDay());
-    currentWeekStart.setHours(0, 0, 0, 0);
-
-    // Calculate last week's range
-    const lastWeekStart = new Date(currentWeekStart);
-    lastWeekStart.setDate(lastWeekStart.getDate() - 7);
-    const lastWeekEnd = new Date(currentWeekStart);
-    lastWeekEnd.setHours(23, 59, 59, 999);
-
-    // Get workouts for current week - removed username filter
-    const currentWeekWorkouts = this.workouts.filter((workout) => {
-      const workoutDate = new Date(workout.date);
-      return workoutDate >= currentWeekStart && workoutDate <= currentDate;
-    });
-
-    // Get workouts for last week - removed username filter
-    const lastWeekWorkouts = this.workouts.filter((workout) => {
-      const workoutDate = new Date(workout.date);
-      return workoutDate >= lastWeekStart && workoutDate < currentWeekStart;
-    });
-
-    this.currentWeekCount = currentWeekWorkouts.length;
-    const lastWeekCount = lastWeekWorkouts.length;
+    this.currentWeekCount = this.workouts.length;
   }
 }

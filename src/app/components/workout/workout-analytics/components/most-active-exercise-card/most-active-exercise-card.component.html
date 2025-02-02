@@ -1,23 +1,24 @@
 <div
   class="w-full py-2 bg-white rounded-2xl shadow-sm"
   pRipple
-  style="--p-ripple-background: rgba(52, 211, 153, 0.3)"
+  style="--p-ripple-background: rgba(239, 68, 68, 0.3)"
 >
-  <div class="flex justify-between items-center px-4 py-5">
-    <div class="flex flex-col justify-end">
+  <div class="flex justify-between items-center px-4 xl:px-6 py-4 xl:py-5">
+    <div class="flex flex-col mr-2">
       <span
-        class="text-gray-400 text-xs uppercase tracking-wider font-medium mb-2"
+        class="text-gray-400 text-xs uppercase tracking-wider font-medium mb-2 whitespace-nowrap"
         >Top Exercise</span
       >
-      <span class="text-[2.25rem] leading-none font-bold text-gray-900">{{
-        mostActiveExercise
-      }}</span>
+      <span
+        class="text-2xl xl:text-[2rem] leading-none font-bold text-gray-900 whitespace-nowrap"
+        >{{ mostActiveExercise }}</span
+      >
     </div>
 
     <img
       src="/workout.png"
       alt="Exercise icon"
-      class="w-16 h-16 object-contain opacity-90"
+      class="w-14 h-14 xl:w-16 xl:h-16 object-contain"
     />
   </div>
 </div>

@@ -1,5 +1,5 @@
 <div
-  class="flex flex-col lg:flex-row lg:space-x-4 max-h-[694px] overflow-hidden"
+  class="flex flex-col lg:flex-row lg:space-x-4 min-h-[700px] overflow-hidden"
 >
   <!-- Username filter section -->
   <div class="w-full lg:w-64 mb-4 lg:mb-0">
@@ -10,29 +10,26 @@
           [options]="usernames"
           [(ngModel)]="selectedUsername$.value"
           (onChange)="onUsernameSelect($event.value)"
-          [filter]="true"
-          filterBy="label"
-          scrollHeight="100%"
+          scrollHeight="max(600px, calc(100vh - 380px))"
           emptyMessage="No usernames found"
           filterPlaceHolder="Search username..."
-          optionLabel="username"
-          styleClass="!border-0 !shadow-none rounded-2xl bg-green-500 overflow-hidden h-[610px]"
+          styleClass="!border-0 !shadow-none rounded-2xl bg-green-500 overflow-hidden "
           listStyleClass="p-2 rounded-2xl"
         >
           <ng-template let-username pTemplate="item">
             <div
-              class="flex items-center px-3 py-2 transition-colors duration-200 rounded-md cursor-pointer mb-1.5"
+              class="flex items-center px-3 py-2 transition-colors duration-200 rounded-md cursor-pointer mb-1.5 overflow-hidden"
             >
-              <div class="flex items-center space-x-3">
+              <div class="flex items-center space-x-3 min-w-0 w-full">
                 <div
                   [style.background-color]="getAvatarColor(username)"
-                  class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-medium"
+                  class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-white text-sm font-medium"
                 >
                   {{ username.charAt(0).toUpperCase() }}
                 </div>
                 <span
                   [class.text-indigo-600]="selectedUsername$.value === username"
-                  class="text-sm font-medium text-gray-700"
+                  class="text-sm font-medium text-gray-700 truncate"
                 >
                   {{ username }}
                 </span>
