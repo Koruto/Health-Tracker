@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { TableModule, TablePageEvent } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -14,6 +14,7 @@ import { WorkoutService } from '../../../services/workout.service';
 import { Workout } from '@interfaces/workout';
 import { CalendarModule } from 'primeng/calendar';
 import { MoodDonutComponent } from '../workout-analytics/components/mood-donut/mood-donut.component';
+import { map, Observable, Subscription, tap } from 'rxjs';
 
 @Component({
   selector: 'app-workout-list',
@@ -35,17 +36,12 @@ import { MoodDonutComponent } from '../workout-analytics/components/mood-donut/m
   templateUrl: './workout-list.component.html',
   styleUrl: './workout-list.component.scss',
 })
-export class WorkoutListComponent implements OnInit {
-  workouts: Workout[] = [];
-  filteredWorkouts: Workout[] = [];
+export class WorkoutListComponent implements OnInit, OnDestroy {
+  private subscription = new Subscription();
 
-  // Pagination
-  first = 0;
-  rows = 5;
-  totalRecords = 0;
-  loading = false;
+  filteredWorkouts$: Observable<Workout[]>;
+  tableData: Workout[] = [];
 
-  // Filters
   searchQuery = '';
   selectedWorkoutTypes: { name: string; value: string }[] = [];
   selectedIntensities: { name: string; value: string }[] = [];
@@ -56,36 +52,52 @@ export class WorkoutListComponent implements OnInit {
     { name: 'High', value: 'High' },
   ];
 
-  selectedWorkouts: Workout[] = [];
-  editingWorkout: Workout | null = null;
+  // Pagination properties
+  first = 0;
+  rows = 5;
+  totalRecords = 0;
+  loading = false;
 
-  constructor(private workoutService: WorkoutService) {}
-
-  ngOnInit(): void {
-    this.loadWorkouts();
+  constructor(
+    private workoutService: WorkoutService,
+    private cdr: ChangeDetectorRef
+  ) {
+    this.filteredWorkouts$ = this.workoutService.workouts$.pipe(
+      map((workouts: Workout[]) => {
+        this.initializeWorkoutTypeOptions(workouts);
+        return this.applyFilters(workouts);
+      }),
+      tap((workouts: Workout[]) => {
+        this.tableData = [...workouts]; // Create a new reference
+        this.totalRecords = workouts.length;
+        this.cdr.detectChanges();
+      })
+    );
   }
 
-  private initializeWorkoutTypeOptions(): void {
+  ngOnInit(): void {
+    // Subscribe to workouts updates
+    this.subscription.add(
+      this.filteredWorkouts$.subscribe((filtered) => {
+        console.log('Filtered workouts updated:', filtered);
+        this.totalRecords = filtered.length;
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  private initializeWorkoutTypeOptions(workouts: Workout[]): void {
     this.workoutTypeOptions = [
-      ...new Set(this.workouts.map((workout) => workout.workoutType)),
+      ...new Set(workouts.map((workout) => workout.workoutType)),
     ].map((type) => ({ name: type, value: type }));
   }
 
-  loadWorkouts(): void {
-    this.loading = true;
-    try {
-      this.workouts = this.workoutService.getWorkouts();
-      this.initializeWorkoutTypeOptions();
-      this.applyFilters();
-    } finally {
-      this.loading = false;
-    }
-  }
+  private applyFilters(workouts: Workout[]): Workout[] {
+    let filtered = workouts;
 
-  applyFilters(): void {
-    let filtered = this.workouts;
-
-    // Apply workout type filter
     if (this.selectedWorkoutTypes.length > 0) {
       filtered = filtered.filter((workout) =>
         this.selectedWorkoutTypes.some(
@@ -94,7 +106,6 @@ export class WorkoutListComponent implements OnInit {
       );
     }
 
-    // Apply intensity filter
     if (this.selectedIntensities.length > 0) {
       filtered = filtered.filter((workout) =>
         this.selectedIntensities.some(
@@ -103,7 +114,6 @@ export class WorkoutListComponent implements OnInit {
       );
     }
 
-    // Apply search filter
     if (this.searchQuery) {
       const query = this.searchQuery.toLowerCase();
       filtered = filtered.filter(
@@ -114,11 +124,44 @@ export class WorkoutListComponent implements OnInit {
       );
     }
 
-    this.filteredWorkouts = filtered;
-    this.totalRecords = filtered.length;
+    return filtered;
   }
 
-  // Pagination methods
+  onSearch(): void {
+    this.first = 0;
+    this.refreshData();
+  }
+
+  onWorkoutTypeFilter(event: {
+    value: { name: string; value: string }[];
+  }): void {
+    this.selectedWorkoutTypes = event.value;
+    this.first = 0;
+    this.refreshData();
+  }
+
+  onIntensityFilter(event: { value: { name: string; value: string }[] }): void {
+    this.selectedIntensities = event.value;
+    this.first = 0;
+    this.refreshData();
+  }
+
+  clearFilters(): void {
+    this.selectedWorkoutTypes = [];
+    this.selectedIntensities = [];
+    this.searchQuery = '';
+    this.first = 0;
+    this.refreshData();
+  }
+
+  private refreshData(): void {
+    // Force a new emission from the service
+    const currentWorkouts = this.workoutService.getWorkouts();
+    console.log('Refreshing with workouts:', currentWorkouts);
+    this.workoutService.refreshWorkouts();
+  }
+
+  // Pagination methods remain the same
   next(): void {
     this.first = Math.min(
       this.first + this.rows,
@@ -132,15 +175,7 @@ export class WorkoutListComponent implements OnInit {
 
   reset(): void {
     this.first = 0;
-    this.selectedWorkoutTypes = [];
-    this.selectedIntensities = [];
-    this.searchQuery = '';
-    this.applyFilters();
-  }
-
-  pageChange(event: TablePageEvent): void {
-    this.first = event.first;
-    this.rows = event.rows;
+    this.clearFilters();
   }
 
   isLastPage(): boolean {
@@ -151,36 +186,5 @@ export class WorkoutListComponent implements OnInit {
 
   isFirstPage(): boolean {
     return this.first === 0;
-  }
-
-  // Filter event handlers
-  onSearch(): void {
-    this.first = 0;
-    this.applyFilters();
-  }
-
-  onWorkoutTypeFilter(event: any): void {
-    this.selectedWorkoutTypes = event.value;
-    this.first = 0;
-    this.applyFilters();
-  }
-
-  onIntensityFilter(event: any): void {
-    this.selectedIntensities = event.value;
-    this.first = 0;
-    this.applyFilters();
-  }
-
-  clearFilters(): void {
-    this.selectedWorkoutTypes = [];
-    this.selectedIntensities = [];
-    this.searchQuery = '';
-    this.first = 0;
-    this.applyFilters();
-  }
-
-  viewWorkout(workout: Workout): void {
-    // Implement view details logic here
-    console.log('View workout:', workout);
   }
 }

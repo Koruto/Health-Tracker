@@ -28,23 +28,21 @@
   <!-- Data Table -->
   <p-table
     #dt1
-    [value]="filteredWorkouts"
+    [value]="tableData"
     [paginator]="true"
     [rows]="rows"
     [first]="first"
     [totalRecords]="totalRecords"
-    [loading]="loading"
     [showCurrentPageReport]="true"
     [rowsPerPageOptions]="[5, 10, 25, 50]"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} workouts"
-    (onPage)="pageChange($event)"
-    sortMode="multiple"
     styleClass="p-datatable-striped"
-    [tableStyle]="{ 'min-width': '70rem' }"
+    tableStyleClass="min-w-[70rem]"
     rowGroupMode="rowspan"
     groupRowsBy="username"
-    [sortField]="'username'"
-    [sortOrder]="1"
+    [scrollable]="true"
+    scrollHeight="440px"
+    resetPageOnSort="false"
   >
     <ng-template pTemplate="caption">
       <div class="flex flex-column md:flex-row gap-3 mb-4">
@@ -115,24 +113,12 @@
         <th pSortableColumn="username" style="width: 15%">
           Username <p-sortIcon field="username" />
         </th>
-        <th pSortableColumn="date" style="width: 15%">
-          Date <p-sortIcon field="date" />
-        </th>
-        <th pSortableColumn="workoutType" style="width: 12%">
-          Workout Type <p-sortIcon field="workoutType" />
-        </th>
-        <th pSortableColumn="intensity" style="width: 10%">
-          Intensity <p-sortIcon field="intensity" />
-        </th>
-        <th pSortableColumn="minutes" style="width: 10%">
-          Minutes <p-sortIcon field="minutes" />
-        </th>
-        <th pSortableColumn="calories" style="width: 10%">
-          Calories <p-sortIcon field="calories" />
-        </th>
-        <th pSortableColumn="mood" style="width: 10%">
-          Mood <p-sortIcon field="mood" />
-        </th>
+        <th style="width: 15%">Date</th>
+        <th style="width: 12%">Workout Type</th>
+        <th style="width: 10%">Intensity</th>
+        <th style="width: 10%">Minutes</th>
+        <th style="width: 10%">Calories</th>
+        <th style="width: 10%">Mood</th>
       </tr>
     </ng-template>
 

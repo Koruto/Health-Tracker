@@ -44,67 +44,66 @@ export class WeeklyActivityComponent implements OnChanges {
     [WorkoutType.Rest]: 'rgba(232, 244, 248, 0.8)',
   };
 
-  // Calculate default week range
-  private calculateDefaultWeekRange() {
-    const currentDate = new Date();
-    currentDate.setHours(23, 59, 59, 999); // Set to end of day
-
-    const sevenDaysAgo = new Date(currentDate);
-    sevenDaysAgo.setDate(currentDate.getDate() - 6); // Change to -6 to include today
-    sevenDaysAgo.setHours(0, 0, 0, 0);
-
-    return { start: sevenDaysAgo, end: currentDate };
-  }
-
   ngOnChanges() {
     this.processWeeklyData();
   }
 
   private processWeeklyData(): void {
-    const { start: weekStart, end: weekEnd } = this.calculateDefaultWeekRange();
+    // Calculate the current week's date range for display
+    const currentDate = new Date();
+    const sevenDaysAgo = new Date(currentDate);
+    sevenDaysAgo.setDate(currentDate.getDate() - 6);
 
-    this.weekRange = `${weekStart.toLocaleDateString('en-US', {
+    this.weekRange = `${sevenDaysAgo.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
-    })} - ${weekEnd.toLocaleDateString('en-US', {
+    })} - ${currentDate.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
     })}`;
 
-    // Initialize array for each day
+    // Process the pre-filtered workouts by day
     const dailyWorkouts: DailyWorkout[][] = Array(7)
       .fill(null)
       .map(() => []);
 
-    // Group workouts by day
-    this.workouts
-      .filter((workout) => {
-        const workoutDate = new Date(workout.date);
-        return workoutDate >= weekStart && workoutDate <= weekEnd;
-      })
-      .forEach((workout) => {
-        const dayIndex = new Date(workout.date).getDay();
-        dailyWorkouts[dayIndex].push({
+    this.workouts.forEach((workout) => {
+      const workoutDate = new Date(workout.date);
+      // Calculate days from the start (7 days ago)
+      const daysDiff = Math.floor(
+        (workoutDate.getTime() - sevenDaysAgo.getTime()) / (1000 * 60 * 60 * 24)
+      );
+      // This will place today's workouts at index 6, yesterday's at 5, etc.
+      if (daysDiff >= 0 && daysDiff < 7) {
+        dailyWorkouts[daysDiff].push({
           type: workout.workoutType as WorkoutType,
           duration: workout.minutes,
           calories: workout.calories,
         });
-      });
+      }
+    });
 
     this.prepareChartData(dailyWorkouts);
   }
 
   private prepareChartData(dailyWorkouts: DailyWorkout[][]): void {
-    // Get all workout types in the data
+    const currentDate = new Date();
+    const dates = Array(7)
+      .fill(null)
+      .map((_, i) => {
+        const date = new Date(currentDate);
+        date.setDate(currentDate.getDate() - (6 - i));
+        return date;
+      });
+
     const workoutTypes = Object.values(WorkoutType);
 
     const datasets = workoutTypes.map((type) => ({
       label: type,
       data: dailyWorkouts.map((dayWorkouts) => {
         const workout = dayWorkouts.find((w) => w.type === type);
-        // If it's a rest day, show a fixed duration
         if (type === WorkoutType.Rest && workout) {
-          return 30; // Fixed duration for visual consistency
+          return 30;
         }
         return workout?.duration || 0;
       }),
@@ -113,7 +112,9 @@ export class WeeklyActivityComponent implements OnChanges {
     }));
 
     this.chartData = {
-      labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      labels: dates.map((date) =>
+        date.toLocaleDateString('en-US', { weekday: 'short' })
+      ),
       datasets,
     };
 
@@ -134,6 +135,14 @@ export class WeeklyActivityComponent implements OnChanges {
         },
         tooltip: {
           callbacks: {
+            title: (tooltipItems: any[]) => {
+              const index = tooltipItems[0].dataIndex;
+              return dates[index].toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'short',
+                day: 'numeric',
+              });
+            },
             label: (context: any) => {
               const dayIndex = context.dataIndex;
               const workoutType = context.dataset.label;

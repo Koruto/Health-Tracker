@@ -5,12 +5,12 @@ import { ChartModule } from 'primeng/chart';
 import { Workout } from '@interfaces/workout';
 
 @Component({
-  selector: 'app-weekly-performance-chart',
+  selector: 'app-weekly-overview-chart',
   standalone: true,
   imports: [CommonModule, CardModule, ChartModule],
-  templateUrl: './weekly-performance-chart.component.html',
+  templateUrl: './weekly-overview-chart.component.html',
 })
-export class WeeklyPerformanceChartComponent implements OnChanges {
+export class WeeklyOverviewChartComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
   chartData: any;

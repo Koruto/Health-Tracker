@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, combineLatest, of } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { map, shareReplay, startWith } from 'rxjs/operators';
 
 import { WorkoutService } from '../../../services/workout.service';
@@ -8,7 +8,7 @@ import { StreakCardComponent } from './components/streak-card/streak-card.compon
 import { MostActiveExerciseCardComponent } from './components/most-active-exercise-card/most-active-exercise-card.component';
 import { TotalActivitiesCardComponent } from './components/total-activities-card/total-activities-card.component';
 import { CaloriesSummaryCardComponent } from './components/calories-summary-card/calories-summary-card.component';
-import { WeeklyPerformanceChartComponent } from './components/weekly-performance-chart/weekly-performance-chart.component';
+import { WeeklyOverviewChartComponent } from './components/weekly-overview-chart/weekly-overview-chart.component';
 import { WorkoutDistributionComponent } from './components/workout-distribution-chart/workout-distribution-chart.component';
 import { MoodSummaryCardComponent } from './components/mood-summary-card/mood-summary-card.component';
 import { WeeklyActivityComponent } from './components/weekly-activity/weekly-activity.component';
@@ -26,7 +26,7 @@ import { CommonModule } from '@angular/common';
     MostActiveExerciseCardComponent,
     TotalActivitiesCardComponent,
     CaloriesSummaryCardComponent,
-    WeeklyPerformanceChartComponent,
+    WeeklyOverviewChartComponent,
     WorkoutDistributionComponent,
     MoodSummaryCardComponent,
     WeeklyActivityComponent,
@@ -37,47 +37,73 @@ import { CommonModule } from '@angular/common';
   templateUrl: './workout-analytics.component.html',
 })
 export class WorkoutAnalyticsComponent implements OnInit {
-  workouts: Workout[] = [];
   usernames: string[] = [];
+  selectedUsername$ = new BehaviorSubject<string>('');
+  filteredWorkouts$: Observable<Workout[]>;
 
-  selectedUsername$ = new BehaviorSubject<string>(''); // Changed to string instead of string | null
-  private workouts$ = new BehaviorSubject<Workout[]>([]);
+  private avatarColors = [
+    '#4F46E5', // indigo-600
+    '#0891B2', // cyan-600
+    '#DB2777', // pink-600
+    '#7C3AED', // violet-600
+    '#2563EB', // blue-600
+    '#059669', // emerald-600
+    '#DC2626', // red-600
+    '#9333EA', // purple-600
+  ];
 
-  filteredWorkouts$ = combineLatest([
-    this.workouts$,
-    this.selectedUsername$,
-  ]).pipe(
-    map(([workouts, username]) => {
-      // If no username is selected, use the first username
-      const effectiveUsername = username || this.usernames[0];
-      return workouts.filter(
-        (workout) => workout.username === effectiveUsername
-      );
-    }),
-    shareReplay(1) // Add shareReplay to prevent multiple subscriptions
-  );
+  constructor(private workoutService: WorkoutService) {
+    this.filteredWorkouts$ = combineLatest([
+      this.workoutService.workouts$,
+      this.selectedUsername$,
+    ]).pipe(
+      map(([workouts, username]) => {
+        // Update usernames whenever workouts change
+        this.usernames = Array.from(
+          new Set(workouts.map((workout: Workout) => workout.username))
+        );
 
-  constructor(private workoutService: WorkoutService) {}
+        // Set default username if needed
+        if (this.usernames.length > 0 && !this.selectedUsername$.value) {
+          this.selectedUsername$.next(this.usernames[0]);
+        }
+
+        const effectiveUsername = username || this.usernames[0];
+        const sevenDaysAgo = this.getSevenDaysAgo();
+
+        return workouts.filter((workout) => {
+          const workoutDate = new Date(workout.date);
+          return (
+            workout.username === effectiveUsername &&
+            workoutDate >= sevenDaysAgo &&
+            workoutDate <= new Date()
+          );
+        });
+      }),
+      shareReplay(1)
+    );
+  }
+
+  // Helper function to get date 7 days ago
+  private getSevenDaysAgo(): Date {
+    const date = new Date();
+    date.setDate(date.getDate() - 6);
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }
 
   ngOnInit() {
-    const workouts: Workout[] = this.workoutService.getWorkouts();
-    this.workouts$.next(workouts);
-    this.workouts = workouts;
-
-    // Extract unique usernames
-    this.usernames = Array.from(
-      new Set(workouts.map((workout: Workout) => workout.username))
-    );
-
-    // Set the first username as default
-    if (this.usernames.length > 0) {
-      this.selectedUsername$.next(this.usernames[0]);
-    }
+    // Initialize subscription
+    this.filteredWorkouts$.subscribe();
   }
 
   onUsernameSelect(username: string | null) {
-    // If username is null or empty, set it to the first username
     const effectiveUsername = username || this.usernames[0];
     this.selectedUsername$.next(effectiveUsername);
+  }
+
+  getAvatarColor(username: string): string {
+    const index = username.charCodeAt(0) % this.avatarColors.length;
+    return this.avatarColors[index];
   }
 }

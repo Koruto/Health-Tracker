@@ -1,59 +1,45 @@
-<div class="flex flex-col lg:flex-row lg:space-x-4">
+<div
+  class="flex flex-col lg:flex-row lg:space-x-4 max-h-[694px] overflow-hidden"
+>
   <!-- Username filter section -->
   <div class="w-full lg:w-64 mb-4 lg:mb-0">
-    <div
-      class="bg-white shadow-sm rounded-lg p-4 h-full sticky top-4 transition-all"
-    >
-      <h3 class="text-lg font-semibold mb-3 text-gray-800 text-center">
-        Users
-      </h3>
-      <div class="rounded-lg bg-gray-50">
+    <div class="bg-white shadow-sm rounded-2xl p-4 h-full sticky top-4">
+      <h3 class="text-3xl font-bold mb-3 text-gray-800 text-center">Users</h3>
+      <div class="rounded-2xl">
         <p-listbox
           [options]="usernames"
           [(ngModel)]="selectedUsername$.value"
           (onChange)="onUsernameSelect($event.value)"
           [filter]="true"
           filterBy="label"
-          [style]="{
-            width: '100%',
-            height: 'calc(100vh - 200px)',
-            minHeight: '300px'
-          }"
+          scrollHeight="100%"
           emptyMessage="No usernames found"
-          placeHolder="'Search username...'"
+          filterPlaceHolder="Search username..."
           optionLabel="username"
-          styleClass="!border-0 !bg-transparent"
+          styleClass="!border-0 !shadow-none rounded-2xl bg-green-500 overflow-hidden h-[610px]"
+          listStyleClass="p-2 rounded-2xl"
         >
           <ng-template let-username pTemplate="item">
             <div
-              class="flex items-center p-3 hover:bg-gray-100 transition-colors duration-200 rounded-md cursor-pointer"
+              class="flex items-center px-3 py-2 transition-colors duration-200 rounded-md cursor-pointer mb-1.5"
             >
               <div class="flex items-center space-x-3">
-                <!-- Optional: Add an avatar or icon -->
                 <div
-                  class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600"
+                  [style.background-color]="getAvatarColor(username)"
+                  class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-medium"
                 >
                   {{ username.charAt(0).toUpperCase() }}
                 </div>
-                <span class="text-sm font-medium text-gray-700">{{
-                  username
-                }}</span>
+                <span
+                  [class.text-indigo-600]="selectedUsername$.value === username"
+                  class="text-sm font-medium text-gray-700"
+                >
+                  {{ username }}
+                </span>
               </div>
             </div>
           </ng-template>
         </p-listbox>
-      </div>
-
-      <div
-        *ngIf="selectedUsername$.value"
-        class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-100"
-      >
-        <p class="text-sm font-medium text-gray-700">
-          Selected User:
-          <span class="text-blue-600 font-semibold ml-1">{{
-            selectedUsername$.value
-          }}</span>
-        </p>
       </div>
     </div>
   </div>
@@ -77,9 +63,9 @@
     <!-- Second row -->
     <div class="grid grid-cols-12 gap-4 mb-4">
       <div class="col-span-12 lg:col-span-8">
-        <app-weekly-performance-chart
+        <app-weekly-overview-chart
           [workouts]="filteredWorkouts"
-        ></app-weekly-performance-chart>
+        ></app-weekly-overview-chart>
       </div>
       <div class="col-span-12 lg:col-span-4">
         <app-workout-distribution-chart

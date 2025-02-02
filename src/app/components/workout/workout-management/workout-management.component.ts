@@ -24,11 +24,4 @@ export class WorkoutManagementComponent {
   showDialog() {
     this.visible = true;
   }
-
-  onWorkoutAdded() {
-    // Find the workout-list component and trigger refresh
-    if (this.workoutList) {
-      this.workoutList.loadWorkouts();
-    }
-  }
 }

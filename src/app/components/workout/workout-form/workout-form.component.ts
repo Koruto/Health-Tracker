@@ -38,8 +38,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
   styleUrl: './workout-form.component.scss',
 })
 export class WorkoutFormComponent {
-  @Output() workoutAdded = new EventEmitter<void>();
-
   workoutForm: FormGroup;
   workoutTypes = [
     { name: 'Cardio', value: 'Cardio' },
@@ -71,7 +69,7 @@ export class WorkoutFormComponent {
       mood: 0,
     });
   }
-  // Done
+
   constructor(private fb: FormBuilder, private workoutService: WorkoutService) {
     this.workoutForm = this.fb.group({
       username: ['', Validators.required],
@@ -130,7 +128,6 @@ export class WorkoutFormComponent {
       console.log('Workout added successfully!', workout);
       this.workoutForm.reset();
       this.visible = false;
-      this.workoutAdded.emit();
     }
   }
 
