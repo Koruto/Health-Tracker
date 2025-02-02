@@ -3,8 +3,8 @@
 >
   <!-- Username filter section -->
   <div class="w-full lg:w-64 mb-4 lg:mb-0">
-    <div class="bg-white shadow-sm rounded-2xl p-4 h-full sticky top-4">
-      <h3 class="text-3xl font-bold mb-3 text-gray-800 text-center">Users</h3>
+    <div class="bg-white shadow-sm rounded-2xl p-4 sticky">
+      <h3 class="text-3xl font-bold mb-3 text-gray-900 text-center">Users</h3>
       <div class="rounded-2xl">
         <p-listbox
           [options]="usernames"
@@ -13,7 +13,7 @@
           scrollHeight="max(600px, calc(100vh - 380px))"
           emptyMessage="No usernames found"
           filterPlaceHolder="Search username..."
-          styleClass="!border-0 !shadow-none rounded-2xl bg-green-500 overflow-hidden "
+          styleClass="!border-0 !shadow-none rounded-2xl overflow-hidden "
           listStyleClass="p-2 rounded-2xl"
         >
           <ng-template let-username pTemplate="item">

@@ -107,7 +107,7 @@
     </ng-template>
 
     <ng-template pTemplate="header">
-      <tr>
+      <tr class="text-gray-900">
         <th class="w-[5%]">#</th>
         <th pSortableColumn="username" class="w-[15%]">
           Username <p-sortIcon field="username" />
@@ -128,12 +128,12 @@
       let-rowgroup="rowgroup"
       let-rowspan="rowspan"
     >
-      <tr>
+      <tr class="text-gray-700">
         <td class="whitespace-nowrap">{{ rowIndex + 1 }}</td>
         <td
           *ngIf="rowgroup"
           [attr.rowspan]="rowspan"
-          class="bg-gray-50 font-semibold whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]"
+          class="bg-[#f9f9f9] font-semibold whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]"
           [pTooltip]="workout.username"
           [tooltipDisabled]="workout.username.length <= 20"
         >
