@@ -11,9 +11,17 @@ A modern, responsive SPA for tracking and analyzing workout activities. Built wi
 - 💾 Local storage persistence
 - 🎨 Modern UI with PrimeNG components
 
+<br>
+
+![Add Workout](screenshots/Add_Workout.png)
+
+![Workout Table](screenshots/Workout_Table.png)
+
+![Workout Analytics](screenshots/Workout_Analytics.png)
+
 ## Tech Stack
 
-- Angular 17
+- Angular 19
 - PrimeNG
 - Tailwind
 - TypeScript
@@ -24,7 +32,7 @@ A modern, responsive SPA for tracking and analyzing workout activities. Built wi
 
 - Node.js (v18.x or higher)
 - npm (v9.x or higher)
-- Angular CLI (v17.x)
+- Angular CLI (v19.x)
 
 ## Getting Started
 
@@ -57,32 +65,22 @@ src/
 ┃ ┣ components/
 ┃ ┃ ┣ layout/
 ┃ ┃ ┃ ┣ main-layout/
-┃ ┃ ┃ ┃ ┣ main-layout.component.html
-┃ ┃ ┃ ┃ ┣ main-layout.component.scss
-┃ ┃ ┃ ┃ ┗ main-layout.component.ts
 ┃ ┃ ┃ ┗ sidebar/
-┃ ┃ ┃   ┣ sidebar.component.html
-┃ ┃ ┃   ┣ sidebar.component.scss
-┃ ┃ ┃   ┗ sidebar.component.ts
 ┃ ┃ ┗ workout/
 ┃ ┃   ┣ workout-analytics/
 ┃ ┃ ┃ ┃ ┣ components/
-┃ ┃ ┃ ┃ ┣ workout-analytics.component.html
-┃ ┃ ┃ ┃ ┣ workout-analytics.component.scss
-┃ ┃ ┃ ┃ ┗ workout-analytics.component.ts
+┃ ┃ ┃ ┃ ┃ ┣ calories-summary-card/
+┃ ┃ ┃ ┃ ┃ ┣ mood-donut/
+┃ ┃ ┃ ┃ ┃ ┣ mood-summary-card/
+┃ ┃ ┃ ┃ ┃ ┣ most-active-exercise-card/
+┃ ┃ ┃ ┃ ┃ ┣ streak-card/
+┃ ┃ ┃ ┃ ┃ ┣ total-activities-card/
+┃ ┃ ┃ ┃ ┃ ┣ weekly-activity-chart/
+┃ ┃ ┃ ┃ ┃ ┣ weekly-overview-chart/
+┃ ┃ ┃ ┃ ┃ ┗ workout-distribution-chart/
+┃ ┃   ┣ workout-dashboard/
 ┃ ┃   ┣ workout-form/
-┃ ┃ ┃ ┃ ┣ workout-form.component.html
-┃ ┃ ┃ ┃ ┣ workout-form.component.scss
-┃ ┃ ┃ ┃ ┗ workout-form.component.ts
-┃ ┃   ┣ workout-list/
-┃ ┃ ┃ ┃ ┣ workout-list.component.html
-┃ ┃ ┃ ┃ ┣ workout-list.component.scss
-┃ ┃ ┃ ┃ ┣ workout-list.component.spec.ts
-┃ ┃ ┃ ┃ ┗ workout-list.component.ts
-┃ ┃   ┗ workout-management/
-┃ ┃ ┃   ┣ workout-management.component.html
-┃ ┃ ┃   ┣ workout-management.component.scss
-┃ ┃ ┃   ┗ workout-management.component.ts
+┃ ┃   ┗ workout-table/
 ┃ ┣ data/
 ┃ ┃ ┗ initial-workouts.ts
 ┃ ┣ interfaces/
@@ -159,14 +157,6 @@ describe('WorkoutListComponent', () => {
 });
 ```
 
-## State Management
+### Test Coverage Report
 
-- Uses RxJS BehaviorSubject for state management
-- Local storage persistence for data retention
-- Service pattern for centralized data handling
-
-## Building for Production
-
-```bash
-npm run build
-```
+![Test Coverage Report](screenshots/Test_Coverage_Report.png)
