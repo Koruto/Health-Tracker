@@ -14,7 +14,7 @@ import { CaloriesSummaryCardComponent } from './components/calories-summary-card
 import { WeeklyOverviewChartComponent } from './components/weekly-overview-chart/weekly-overview-chart.component';
 import { WorkoutDistributionChartComponent } from './components/workout-distribution-chart/workout-distribution-chart.component';
 import { MoodSummaryCardComponent } from './components/mood-summary-card/mood-summary-card.component';
-import { WeeklyActivityComponent } from './components/weekly-activity/weekly-activity.component';
+import { WeeklyActivityChartComponent } from './components/weekly-activity-chart/weekly-activity-chart.component';
 
 @Component({
   selector: 'app-workout-analytics',
@@ -27,7 +27,7 @@ import { WeeklyActivityComponent } from './components/weekly-activity/weekly-act
     WeeklyOverviewChartComponent,
     WorkoutDistributionChartComponent,
     MoodSummaryCardComponent,
-    WeeklyActivityComponent,
+    WeeklyActivityChartComponent,
     ListboxModule,
     FormsModule,
     CommonModule,
@@ -82,7 +82,7 @@ export class WorkoutAnalyticsComponent implements OnInit {
     );
   }
 
-  // Helper function to get date 7 days ago
+  // Helper function to get past week data
   private getSevenDaysAgo(): Date {
     const date = new Date();
     date.setDate(date.getDate() - 6);

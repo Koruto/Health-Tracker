@@ -1,4 +1,5 @@
 <div class="card flex justify-center">
+  <p-toast position="bottom-right" key="br" />
   <p-button (click)="showDialog()" label="Add Workout" />
   <p-dialog header="Add Workout" [modal]="true" [(visible)]="visible">
     <form [formGroup]="workoutForm" (ngSubmit)="onSubmit()">

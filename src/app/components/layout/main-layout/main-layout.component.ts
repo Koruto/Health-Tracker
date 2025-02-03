@@ -1,12 +1,12 @@
 import { Component, HostListener, inject, OnInit } from '@angular/core';
 
 import { WorkoutAnalyticsComponent } from '../../workout/workout-analytics/workout-analytics.component';
-import { WorkoutManagementComponent } from '../../workout/workout-management/workout-management.component';
+import { WorkoutDashboardComponent } from '../../workout/workout-dashboard/workout-dashboard.component';
 import { NavigationService } from '@services/navigation/navigation.service';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [WorkoutAnalyticsComponent, WorkoutManagementComponent],
+  imports: [WorkoutAnalyticsComponent, WorkoutDashboardComponent],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
 })

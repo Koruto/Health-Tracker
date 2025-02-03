@@ -19,7 +19,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { MoodDonutComponent } from '../workout-analytics/components/mood-donut/mood-donut.component';
 
 @Component({
-  selector: 'app-workout-list',
+  selector: 'app-workout-table',
   standalone: true,
   imports: [
     TableModule,
@@ -36,11 +36,11 @@ import { MoodDonutComponent } from '../workout-analytics/components/mood-donut/m
     MoodDonutComponent,
     NgIcon,
   ],
-  templateUrl: './workout-list.component.html',
-  styleUrl: './workout-list.component.scss',
+  templateUrl: './workout-table.component.html',
+  styleUrl: './workout-table.component.scss',
   viewProviders: [provideIcons({ octFilterRemove })],
 })
-export class WorkoutListComponent implements OnInit, OnDestroy {
+export class WorkoutTableComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
 
   filteredWorkouts$: Observable<Workout[]>;

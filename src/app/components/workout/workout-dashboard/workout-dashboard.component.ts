@@ -3,21 +3,21 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 
 import { WorkoutFormComponent } from '../workout-form/workout-form.component';
-import { WorkoutListComponent } from '../workout-list/workout-list.component';
+import { WorkoutTableComponent } from '../workout-table/workout-table.component';
 
 @Component({
-  selector: 'app-workout-management',
+  selector: 'app-workout-dashboard',
   imports: [
     ButtonModule,
     InputTextModule,
     WorkoutFormComponent,
-    WorkoutListComponent,
+    WorkoutTableComponent,
   ],
-  templateUrl: './workout-management.component.html',
-  styleUrl: './workout-management.component.scss',
+  templateUrl: './workout-dashboard.component.html',
+  styleUrl: './workout-dashboard.component.scss',
 })
-export class WorkoutManagementComponent {
-  @ViewChild(WorkoutListComponent) workoutList!: WorkoutListComponent;
+export class WorkoutDashboardComponent {
+  @ViewChild(WorkoutTableComponent) workoutList!: WorkoutTableComponent;
 
   visible = false;
 

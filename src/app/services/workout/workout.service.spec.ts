@@ -94,25 +94,6 @@ describe('WorkoutService', () => {
         done();
       });
     });
-
-    // it('should add new workout to existing workouts', done => {
-    //   const existingWorkout = INITIAL_WORKOUTS[0];
-    //   localStorageSpy.getItem.and.returnValue(
-    //     JSON.stringify([existingWorkout])
-    //   );
-    //   service = TestBed.inject(WorkoutService);
-    //   service.addWorkout(mockWorkout);
-
-    //   service.workouts$.subscribe(workouts => {
-    //     expect(workouts.length).toBe(2);
-    //     // expect(workouts[1]).toEqual(mockWorkout);
-    //     expect(localStorageSpy.setItem).toHaveBeenCalledWith(
-    //       'workouts',
-    //       JSON.stringify([existingWorkout, mockWorkout])
-    //     );
-    //     done();
-    //   });
-    // });
   });
 
   describe('refreshWorkouts', () => {

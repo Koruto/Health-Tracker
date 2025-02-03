@@ -1,5 +1,7 @@
 <div
   class="left-0 top-0 h-screen w-20 bg-[#131321] text-black flex flex-col items-center py-6 shadow-xl">
+  <p-toast position="bottom-right" key="br" />
+  <p-confirmdialog />
   <div class="mb-10">
     <div class="w-10 h-10 rounded-xl overflow-hidden bg-center">
       <img
@@ -29,6 +31,16 @@
         pTooltip="Analytics"
         tooltipPosition="right">
         <ng-icon name="octGraph" size="20" [color]="'#E71A7F'" />
+      </div>
+    </div>
+
+    <div class="cursor-pointer group" (click)="resetData($event)">
+      <div
+        class="relative transform transition-all duration-300 group-hover:scale-105 px-3.5 py-3 rounded-lg hover:bg-white"
+        [class.bg-[#FDEFF4]]="activeSection === 'analytics'"
+        pTooltip="Analytics"
+        tooltipPosition="right">
+        <ng-icon name="octGear" size="20" [color]="'#E71A7F'" />
       </div>
     </div>
   </div>

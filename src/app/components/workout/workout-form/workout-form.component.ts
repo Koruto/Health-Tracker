@@ -14,11 +14,13 @@ import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { SliderModule } from 'primeng/slider';
 import { RatingModule } from 'primeng/rating';
-
-import { WorkoutService } from '../../../services/workout/workout.service';
+import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DatePicker } from 'primeng/datepicker';
+import { MessageService } from 'primeng/api';
+
+import { WorkoutService } from '@services/workout/workout.service';
 
 @Component({
   selector: 'app-workout-form',
@@ -35,9 +37,11 @@ import { DatePicker } from 'primeng/datepicker';
     SliderModule,
     RatingModule,
     InputNumberModule,
+    ToastModule,
   ],
   templateUrl: './workout-form.component.html',
   styleUrl: './workout-form.component.scss',
+  providers: [MessageService],
 })
 export class WorkoutFormComponent implements OnInit {
   workoutForm: FormGroup;
@@ -82,7 +86,8 @@ export class WorkoutFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private workoutService: WorkoutService
+    private workoutService: WorkoutService,
+    private messageService: MessageService
   ) {
     this.workoutForm = this.fb.group({
       username: ['', [Validators.required, this.noWhitespaceValidator]],
@@ -141,6 +146,13 @@ export class WorkoutFormComponent implements OnInit {
       this.workoutService.addWorkout(workout);
       this.workoutForm.reset();
       this.visible = false;
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Workout Added!',
+        life: 2000,
+        key: 'br',
+      });
     }
   }
 

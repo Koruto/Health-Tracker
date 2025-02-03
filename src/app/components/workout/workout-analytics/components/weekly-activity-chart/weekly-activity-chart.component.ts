@@ -11,7 +11,7 @@ import { WorkoutType } from '@interfaces/workout-types';
 import { DailyWorkout } from '@interfaces/daily-workout';
 
 @Component({
-  selector: 'app-weekly-activity',
+  selector: 'app-weekly-activity-chart',
   standalone: true,
   imports: [
     CommonModule,
@@ -21,9 +21,9 @@ import { DailyWorkout } from '@interfaces/daily-workout';
     ButtonModule,
     FormsModule,
   ],
-  templateUrl: './weekly-activity.component.html',
+  templateUrl: './weekly-activity-chart.component.html',
 })
-export class WeeklyActivityComponent implements OnChanges {
+export class WeeklyActivityChartComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
   chartData: any;

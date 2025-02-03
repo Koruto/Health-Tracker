@@ -4,15 +4,15 @@ import {
   TestBed,
   tick,
 } from '@angular/core/testing';
-import { WorkoutListComponent } from './workout-list.component';
+import { WorkoutTableComponent } from './workout-table.component';
 import { WorkoutService } from '../../../services/workout/workout.service';
 import { BehaviorSubject } from 'rxjs';
 import { Workout } from '@interfaces/workout';
 import { ChangeDetectorRef } from '@angular/core';
 
-describe('WorkoutListComponent', () => {
-  let component: WorkoutListComponent;
-  let fixture: ComponentFixture<WorkoutListComponent>;
+describe('WorkoutTableComponent', () => {
+  let component: WorkoutTableComponent;
+  let fixture: ComponentFixture<WorkoutTableComponent>;
   let workoutService: jasmine.SpyObj<WorkoutService>;
   let mockWorkouts$: BehaviorSubject<Workout[]>;
 
@@ -91,7 +91,7 @@ describe('WorkoutListComponent', () => {
     );
 
     await TestBed.configureTestingModule({
-      imports: [WorkoutListComponent],
+      imports: [WorkoutTableComponent],
       providers: [
         { provide: WorkoutService, useValue: workoutServiceSpy },
         ChangeDetectorRef,
@@ -101,7 +101,7 @@ describe('WorkoutListComponent', () => {
     workoutService = TestBed.inject(
       WorkoutService
     ) as jasmine.SpyObj<WorkoutService>;
-    fixture = TestBed.createComponent(WorkoutListComponent);
+    fixture = TestBed.createComponent(WorkoutTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
