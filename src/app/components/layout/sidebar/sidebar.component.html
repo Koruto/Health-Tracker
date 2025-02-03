@@ -1,13 +1,11 @@
 <div
-  class="left-0 top-0 h-screen w-20 bg-[#131321] text-black flex flex-col items-center py-6 shadow-xl"
->
+  class="left-0 top-0 h-screen w-20 bg-[#131321] text-black flex flex-col items-center py-6 shadow-xl">
   <div class="mb-10">
     <div class="w-10 h-10 rounded-xl overflow-hidden bg-center">
       <img
         src="/FyleIcon.png"
         alt="Fyle Icon"
-        class="w-full h-full object-contain bg-center"
-      />
+        class="w-full h-full object-contain bg-center" />
     </div>
   </div>
 
@@ -19,8 +17,7 @@
         class="relative transform transition-all duration-300 group-hover:scale-105 px-3.5 py-3 rounded-lg hover:bg-white"
         [class.bg-[#FDEFF4]]="activeSection === 'workouts'"
         pTooltip="Dashboard"
-        tooltipPosition="right"
-      >
+        tooltipPosition="right">
         <ng-icon name="octHome" size="20" [color]="'#E71A7F'" />
       </div>
     </div>
@@ -30,8 +27,7 @@
         class="relative transform transition-all duration-300 group-hover:scale-105 px-3.5 py-3 rounded-lg hover:bg-white"
         [class.bg-[#FDEFF4]]="activeSection === 'analytics'"
         pTooltip="Analytics"
-        tooltipPosition="right"
-      >
+        tooltipPosition="right">
         <ng-icon name="octGraph" size="20" [color]="'#E71A7F'" />
       </div>
     </div>

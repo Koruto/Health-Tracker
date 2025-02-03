@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
-import { WorkoutService } from '../../../services/workout.service';
+import { WorkoutService } from '../../../services/workout/workout.service';
 import { Workout } from '../../../interfaces/workout';
 import { StreakCardComponent } from './components/streak-card/streak-card.component';
 import { MostActiveExerciseCardComponent } from './components/most-active-exercise-card/most-active-exercise-card.component';
 import { TotalActivitiesCardComponent } from './components/total-activities-card/total-activities-card.component';
 import { CaloriesSummaryCardComponent } from './components/calories-summary-card/calories-summary-card.component';
 import { WeeklyOverviewChartComponent } from './components/weekly-overview-chart/weekly-overview-chart.component';
-import { WorkoutDistributionComponent } from './components/workout-distribution-chart/workout-distribution-chart.component';
+import { WorkoutDistributionChartComponent } from './components/workout-distribution-chart/workout-distribution-chart.component';
 import { MoodSummaryCardComponent } from './components/mood-summary-card/mood-summary-card.component';
 import { WeeklyActivityComponent } from './components/weekly-activity/weekly-activity.component';
 
@@ -27,7 +27,7 @@ import { CommonModule } from '@angular/common';
     TotalActivitiesCardComponent,
     CaloriesSummaryCardComponent,
     WeeklyOverviewChartComponent,
-    WorkoutDistributionComponent,
+    WorkoutDistributionChartComponent,
     MoodSummaryCardComponent,
     WeeklyActivityComponent,
     ListboxModule,
@@ -71,7 +71,7 @@ export class WorkoutAnalyticsComponent implements OnInit {
         const effectiveUsername = username || this.usernames[0];
         const sevenDaysAgo = this.getSevenDaysAgo();
 
-        return workouts.filter((workout) => {
+        return workouts.filter(workout => {
           const workoutDate = new Date(workout.date);
           return (
             workout.username === effectiveUsername &&

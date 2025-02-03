@@ -29,7 +29,7 @@ export class MostActiveExerciseCardComponent implements OnChanges {
   private calculateMostActiveExercise(): void {
     // Group and sum minutes by workout type
     const exerciseSummary = this.workouts.reduce((acc, workout) => {
-      const existing = acc.find((item) => item.type === workout.workoutType);
+      const existing = acc.find(item => item.type === workout.workoutType);
       if (existing) {
         existing.totalMinutes += workout.minutes;
       } else {

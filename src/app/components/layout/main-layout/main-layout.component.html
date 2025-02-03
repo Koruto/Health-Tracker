@@ -13,7 +13,7 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-image: url("/scrollbar.png");
+    background-image: url('/scrollbar.png');
     background-repeat: no-repeat, no-repeat;
     background-size: 30px;
     background-position: center; /* Center the image */
@@ -22,20 +22,17 @@
 
 <div class="flex h-screen overflow-hidden bg-[#f9f9f9] w-full">
   <main
-    class="flex-1 overflow-y-auto scroll-smooth snap-y snap-mandatory custom-scrollbar"
-  >
+    class="flex-1 overflow-y-auto scroll-smooth snap-y snap-mandatory custom-scrollbar">
     <div class="max-w-7xl mx-auto w-full h-full">
       <section
         id="workouts"
-        class="h-screen snap-start px-6 py-6 bg-white shadow-sm"
-      >
+        class="h-screen snap-start px-6 py-6 bg-white shadow-sm">
         <app-workout-management></app-workout-management>
       </section>
 
       <section
         id="analytics"
-        class="h-screen snap-start px-6 py-6 flex items-center justify-center"
-      >
+        class="h-screen snap-start px-6 py-6 flex items-center justify-center">
         <app-workout-analytics></app-workout-analytics>
       </section>
     </div>

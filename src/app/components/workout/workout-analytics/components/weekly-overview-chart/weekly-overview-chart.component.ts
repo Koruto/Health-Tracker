@@ -38,7 +38,7 @@ export class WeeklyOverviewChartComponent implements OnChanges {
     })}`;
 
     // Filter workouts for last 7 days
-    const weeklyWorkouts = this.workouts.filter((workout) => {
+    const weeklyWorkouts = this.workouts.filter(workout => {
       const workoutDate = new Date(workout.date);
       return workoutDate >= sevenDaysAgo && workoutDate <= currentDate;
     });
@@ -55,10 +55,10 @@ export class WeeklyOverviewChartComponent implements OnChanges {
     let highIntensityMinutes = 0;
 
     // Process workout data
-    weeklyWorkouts.forEach((workout) => {
+    weeklyWorkouts.forEach(workout => {
       const workoutDate = new Date(workout.date);
       const dayIndex = dailyData.findIndex(
-        (day) => day.date.toDateString() === workoutDate.toDateString()
+        day => day.date.toDateString() === workoutDate.toDateString()
       );
 
       if (dayIndex !== -1) {
@@ -77,14 +77,14 @@ export class WeeklyOverviewChartComponent implements OnChanges {
 
   private initializeChart(dailyData: any[]): void {
     this.chartData = {
-      labels: dailyData.map((d) =>
+      labels: dailyData.map(d =>
         d.date.toLocaleDateString('en-US', { weekday: 'short' })
       ),
       datasets: [
         {
           type: 'bar',
           label: 'Minutes',
-          data: dailyData.map((d) => d.minutes),
+          data: dailyData.map(d => d.minutes),
           yAxisID: 'y',
           backgroundColor: 'rgba(75, 192, 192, 0.5)',
           borderColor: 'rgb(75, 192, 192)',
@@ -94,7 +94,7 @@ export class WeeklyOverviewChartComponent implements OnChanges {
         {
           type: 'bar',
           label: 'Calories',
-          data: dailyData.map((d) => d.calories),
+          data: dailyData.map(d => d.calories),
           yAxisID: 'y1',
           backgroundColor: 'rgba(255, 159, 64, 0.5)',
           borderColor: 'rgb(255, 159, 64)',

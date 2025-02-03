@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Workout } from '../interfaces/workout';
-import { INITIAL_WORKOUTS } from '../data/initial-workouts';
+import { Workout } from '../../interfaces/workout';
+import { INITIAL_WORKOUTS } from '../../data/initial-workouts';
 
 @Injectable({ providedIn: 'root' })
 export class WorkoutService {
@@ -22,10 +22,6 @@ export class WorkoutService {
 
     this.workoutsSubject = new BehaviorSubject<Workout[]>(initialData);
     this.workouts$ = this.workoutsSubject.asObservable();
-  }
-
-  getWorkouts(): Workout[] {
-    return this.workoutsSubject.getValue();
   }
 
   addWorkout(workout: Workout) {

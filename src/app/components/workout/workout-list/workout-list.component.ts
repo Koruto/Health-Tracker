@@ -10,7 +10,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { RippleModule } from 'primeng/ripple';
 import { TagModule } from 'primeng/tag';
 
-import { WorkoutService } from '../../../services/workout.service';
+import { WorkoutService } from '../../../services/workout/workout.service';
 import { Workout } from '@interfaces/workout';
 import { CalendarModule } from 'primeng/calendar';
 import { MoodDonutComponent } from '../workout-analytics/components/mood-donut/mood-donut.component';
@@ -78,7 +78,7 @@ export class WorkoutListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Subscribe to workouts updates
     this.subscription.add(
-      this.filteredWorkouts$.subscribe((filtered) => {
+      this.filteredWorkouts$.subscribe(filtered => {
         this.totalRecords = filtered.length;
       })
     );
@@ -90,33 +90,33 @@ export class WorkoutListComponent implements OnInit, OnDestroy {
 
   private initializeWorkoutTypeOptions(workouts: Workout[]): void {
     this.workoutTypeOptions = [
-      ...new Set(workouts.map((workout) => workout.workoutType)),
-    ].map((type) => ({ name: type, value: type }));
+      ...new Set(workouts.map(workout => workout.workoutType)),
+    ].map(type => ({ name: type, value: type }));
   }
 
   private applyFilters(workouts: Workout[]): Workout[] {
     let filtered = workouts;
 
     if (this.selectedWorkoutTypes.length > 0) {
-      filtered = filtered.filter((workout) =>
+      filtered = filtered.filter(workout =>
         this.selectedWorkoutTypes.some(
-          (type) => type.value === workout.workoutType
+          type => type.value === workout.workoutType
         )
       );
     }
 
     if (this.selectedIntensities.length > 0) {
-      filtered = filtered.filter((workout) =>
+      filtered = filtered.filter(workout =>
         this.selectedIntensities.some(
-          (intensity) => intensity.value === workout.intensity
+          intensity => intensity.value === workout.intensity
         )
       );
     }
 
     if (this.searchQuery) {
-      const query = this.searchQuery.toLowerCase();
+      const query = this.searchQuery.toLowerCase().trim();
       filtered = filtered.filter(
-        (workout) =>
+        workout =>
           workout.username.toLowerCase().includes(query) ||
           workout.workoutType.toLowerCase().includes(query) ||
           workout.intensity.toLowerCase().includes(query)
@@ -155,7 +155,6 @@ export class WorkoutListComponent implements OnInit, OnDestroy {
 
   private refreshData(): void {
     // Force a new emission from the service
-    const currentWorkouts = this.workoutService.getWorkouts();
     this.workoutService.refreshWorkouts();
   }
 

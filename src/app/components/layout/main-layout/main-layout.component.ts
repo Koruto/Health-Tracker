@@ -2,7 +2,7 @@ import { Component, HostListener, inject } from '@angular/core';
 
 import { WorkoutAnalyticsComponent } from '../../workout/workout-analytics/workout-analytics.component';
 import { WorkoutManagementComponent } from '../../workout/workout-management/workout-management.component';
-import { NavigationService } from '../../../services/navigation.service';
+import { NavigationService } from '../../../services/navigation/navigation.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -29,7 +29,7 @@ export class MainLayoutComponent {
     let maxVisibility = 0;
     let mostVisibleSection = '';
 
-    sections.forEach((section) => {
+    sections.forEach(section => {
       const rect = section.getBoundingClientRect();
       const visibility = this.getVisibilityPercentage(rect);
 

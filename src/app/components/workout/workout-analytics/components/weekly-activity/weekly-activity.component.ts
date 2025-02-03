@@ -67,7 +67,7 @@ export class WeeklyActivityComponent implements OnChanges {
       .fill(null)
       .map(() => []);
 
-    this.workouts.forEach((workout) => {
+    this.workouts.forEach(workout => {
       const workoutDate = new Date(workout.date);
       // Calculate days from the start (7 days ago)
       const daysDiff = Math.floor(
@@ -98,10 +98,10 @@ export class WeeklyActivityComponent implements OnChanges {
 
     const workoutTypes = Object.values(WorkoutType);
 
-    const datasets = workoutTypes.map((type) => ({
+    const datasets = workoutTypes.map(type => ({
       label: type,
-      data: dailyWorkouts.map((dayWorkouts) => {
-        const workout = dayWorkouts.find((w) => w.type === type);
+      data: dailyWorkouts.map(dayWorkouts => {
+        const workout = dayWorkouts.find(w => w.type === type);
         if (type === WorkoutType.Rest && workout) {
           return 30;
         }
@@ -112,7 +112,7 @@ export class WeeklyActivityComponent implements OnChanges {
     }));
 
     this.chartData = {
-      labels: dates.map((date) =>
+      labels: dates.map(date =>
         date.toLocaleDateString('en-US', { weekday: 'short' })
       ),
       datasets,
@@ -147,7 +147,7 @@ export class WeeklyActivityComponent implements OnChanges {
               const dayIndex = context.dataIndex;
               const workoutType = context.dataset.label;
               const dayWorkouts = dailyWorkouts[dayIndex];
-              const workout = dayWorkouts.find((w) => w.type === workoutType);
+              const workout = dayWorkouts.find(w => w.type === workoutType);
 
               if (!workout) return '';
               if (workoutType === WorkoutType.Rest) return 'Rest Day';

@@ -10,7 +10,7 @@ import { Workout } from '@interfaces/workout';
   imports: [CommonModule, CardModule, ChartModule],
   templateUrl: './workout-distribution-chart.component.html',
 })
-export class WorkoutDistributionComponent implements OnChanges {
+export class WorkoutDistributionChartComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
   chartData: any;
@@ -38,16 +38,19 @@ export class WorkoutDistributionComponent implements OnChanges {
     sevenDaysAgo.setHours(0, 0, 0, 0);
 
     // Filter workouts for last 7 days
-    const recentWorkouts = this.workouts.filter((workout) => {
+    const recentWorkouts = this.workouts.filter(workout => {
       const workoutDate = new Date(workout.date);
       return workoutDate >= sevenDaysAgo && workoutDate <= currentDate;
     });
 
     // Count workouts by type
-    const workoutCounts = recentWorkouts.reduce((acc, workout) => {
-      acc[workout.workoutType] = (acc[workout.workoutType] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const workoutCounts = recentWorkouts.reduce(
+      (acc, workout) => {
+        acc[workout.workoutType] = (acc[workout.workoutType] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     // Sort workout types by count (descending)
     const sortedWorkouts = Object.entries(workoutCounts)
@@ -56,12 +59,12 @@ export class WorkoutDistributionComponent implements OnChanges {
 
     // Prepare chart data
     this.chartData = {
-      labels: sortedWorkouts.map((w) => w.type),
+      labels: sortedWorkouts.map(w => w.type),
       datasets: [
         {
-          data: sortedWorkouts.map((w) => w.count),
+          data: sortedWorkouts.map(w => w.count),
           backgroundColor: this.colorPalette.slice(0, sortedWorkouts.length),
-          borderColor: this.colorPalette.map((color) =>
+          borderColor: this.colorPalette.map(color =>
             color.replace('0.65', '0.8')
           ),
           borderWidth: 1,

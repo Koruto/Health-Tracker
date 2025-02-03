@@ -13,7 +13,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SliderModule } from 'primeng/slider';
 import { RatingModule } from 'primeng/rating';
 
-import { WorkoutService } from '../../../services/workout.service';
+import { WorkoutService } from '../../../services/workout/workout.service';
 import { CommonModule } from '@angular/common';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DatePicker } from 'primeng/datepicker';
@@ -40,7 +40,7 @@ import { DatePicker } from 'primeng/datepicker';
 export class WorkoutFormComponent {
   workoutForm: FormGroup;
   workoutTypes = [
-    { name: '🏃 Running', value: '🏃 Running' },
+    { name: '🏃 Running', value: 'Running' },
     { name: '🏋️ Weight Training', value: 'Weights' },
     { name: '🚶 Walking', value: 'Walking' },
     { name: '🏠 Home Workout', value: 'Home' },
@@ -74,7 +74,10 @@ export class WorkoutFormComponent {
     });
   }
 
-  constructor(private fb: FormBuilder, private workoutService: WorkoutService) {
+  constructor(
+    private fb: FormBuilder,
+    private workoutService: WorkoutService
+  ) {
     this.workoutForm = this.fb.group({
       username: ['', Validators.required],
       workoutType: ['', Validators.required],
@@ -131,7 +134,7 @@ export class WorkoutFormComponent {
         ),
         day: workoutDate.toLocaleDateString('en-US', { weekday: 'long' }),
       };
-
+      console.log('Adding workout', workout)
       this.workoutService.addWorkout(workout);
       this.workoutForm.reset();
       this.visible = false;

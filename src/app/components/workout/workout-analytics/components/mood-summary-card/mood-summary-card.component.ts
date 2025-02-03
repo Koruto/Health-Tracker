@@ -87,7 +87,7 @@ export class MoodSummaryCardComponent implements OnChanges {
     sevenDaysAgo.setHours(0, 0, 0, 0);
 
     // Filter workouts for last 7 days
-    const recentWorkouts = this.workouts.filter((workout) => {
+    const recentWorkouts = this.workouts.filter(workout => {
       const workoutDate = new Date(workout.date);
       return workoutDate >= sevenDaysAgo && workoutDate <= currentDate;
     });
@@ -141,8 +141,7 @@ export class MoodSummaryCardComponent implements OnChanges {
 
   private setMoodDisplay(mood: number): void {
     const moodLevel =
-      this.moodMap.find((m) => mood >= m.min && mood <= m.max) ||
-      this.moodMap[0];
+      this.moodMap.find(m => mood >= m.min && mood <= m.max) || this.moodMap[0];
     this.moodEmoji = moodLevel.emoji;
     this.moodLabel = moodLevel.label;
     this.ringColor = moodLevel.ring;
@@ -151,7 +150,7 @@ export class MoodSummaryCardComponent implements OnChanges {
 
   getMoodColor(): string {
     const moodLevel = this.moodMap.find(
-      (m) => this.avgMood >= m.min && this.avgMood <= m.max
+      m => this.avgMood >= m.min && this.avgMood <= m.max
     );
     return moodLevel?.color || 'text-gray-500';
   }

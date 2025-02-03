@@ -2,8 +2,7 @@
   <div class="flex flex-col items-center justify-between">
     <div class="mb-2">
       <h3
-        class="text-gray-400 text-xs uppercase tracking-wider font-medium text-center"
-      >
+        class="text-gray-400 text-xs uppercase tracking-wider font-medium text-center">
         Workout Mood
       </h3>
     </div>
@@ -18,18 +17,15 @@
 
         <!-- Emoji Overlay -->
         <div
-          class="absolute inset-0 flex items-center justify-center pointer-events-none"
-        >
+          class="absolute inset-0 flex items-center justify-center pointer-events-none">
           <span class="text-6xl">{{ moodEmoji }}</span>
         </div>
 
         <div
-          class="opacity-0 group-hover:opacity-100 transition-opacity absolute top-1/2 left-full ml-3 -translate-y-1/2 whitespace-nowrap"
-        >
+          class="opacity-0 group-hover:opacity-100 transition-opacity absolute top-1/2 left-full ml-3 -translate-y-1/2 whitespace-nowrap">
           <div
             [style.background-color]="tooltipColor"
-            class="px-4 py-2 rounded-lg shadow-lg"
-          >
+            class="px-4 py-2 rounded-lg shadow-lg">
             <div class="text-white/90 text-xs font-medium">
               Score: {{ avgMood.toFixed(1) }}/5
             </div>
@@ -38,8 +34,7 @@
               class="absolute top-1/2 -left-2 -translate-y-1/2 w-0 h-0"
               [style.border-top]="'8px solid transparent'"
               [style.border-bottom]="'8px solid transparent'"
-              [style.border-right]="'8px solid ' + tooltipColor"
-            ></div>
+              [style.border-right]="'8px solid ' + tooltipColor"></div>
           </div>
         </div>
       </div>

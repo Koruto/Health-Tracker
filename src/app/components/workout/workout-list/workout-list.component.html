@@ -7,21 +7,18 @@
         icon="pi pi-chevron-left"
         (click)="prev()"
         [disabled]="isFirstPage()"
-        [text]="true"
-      />
+        [text]="true" />
       <p-button
         type="button"
         icon="pi pi-refresh"
         (click)="reset()"
-        [text]="true"
-      />
+        [text]="true" />
       <p-button
         type="button"
         icon="pi pi-chevron-right"
         (click)="next()"
         [disabled]="isLastPage()"
-        [text]="true"
-      />
+        [text]="true" />
     </div>
   </div>
 
@@ -41,8 +38,7 @@
     groupRowsBy="username"
     [scrollable]="true"
     [scrollHeight]="'calc(100vh - 300px)'"
-    resetPageOnSort="false"
-  >
+    resetPageOnSort="false">
     <ng-template pTemplate="caption">
       <div class="flex flex-column md:flex-row gap-3 mb-4">
         <!-- Search Section -->
@@ -53,8 +49,7 @@
             [(ngModel)]="searchQuery"
             (ngModelChange)="onSearch()"
             placeholder="Search workouts..."
-            class="w-full"
-          />
+            class="w-full" />
         </div>
 
         <!-- Workout Type Filter -->
@@ -67,8 +62,7 @@
             (onChange)="onWorkoutTypeFilter($event)"
             optionLabel="name"
             [style]="{ width: '200px' }"
-            display="chip"
-          >
+            display="chip">
             <ng-template let-option pTemplate="item">
               <div class="flex align-items-center gap-2">
                 <span>{{ option.name }}</span>
@@ -85,8 +79,7 @@
             (onChange)="onIntensityFilter($event)"
             optionLabel="name"
             [style]="{ width: '200px' }"
-            display="chip"
-          >
+            display="chip">
             <ng-template let-option pTemplate="item">
               <div class="flex align-items-center gap-2">
                 <span>{{ option.name }}</span>
@@ -100,8 +93,7 @@
             (click)="clearFilters()"
             [text]="true"
             tooltip="Clear all filters"
-            tooltipPosition="top"
-          />
+            tooltipPosition="top" />
         </div>
       </div>
     </ng-template>
@@ -126,8 +118,7 @@
       let-workout
       let-rowIndex="rowIndex"
       let-rowgroup="rowgroup"
-      let-rowspan="rowspan"
-    >
+      let-rowspan="rowspan">
       <tr class="text-gray-700">
         <td class="whitespace-nowrap">{{ rowIndex + 1 }}</td>
         <td
@@ -135,18 +126,16 @@
           [attr.rowspan]="rowspan"
           class="bg-[#f9f9f9] font-semibold whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]"
           [pTooltip]="workout.username"
-          [tooltipDisabled]="workout.username.length <= 20"
-        >
+          [tooltipDisabled]="workout.username.length <= 20">
           {{ workout.username }}
         </td>
         <td class="whitespace-nowrap">
-          {{ workout.date | date : "MMM d, y" }}
+          {{ workout.date | date: 'MMM d, y' }}
         </td>
         <td
           class="whitespace-nowrap overflow-hidden text-ellipsis max-w-[150px]"
           [pTooltip]="workout.workoutType"
-          [tooltipDisabled]="workout.workoutType.length <= 15"
-        >
+          [tooltipDisabled]="workout.workoutType.length <= 15">
           {{ workout.workoutType }}
         </td>
         <td>
@@ -155,27 +144,24 @@
               'px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis inline-block max-w-full': true,
               'bg-green-100 text-green-800': workout.intensity === 'Low',
               'bg-yellow-100 text-yellow-800': workout.intensity === 'Medium',
-              'bg-red-100 text-red-800': workout.intensity === 'High'
+              'bg-red-100 text-red-800': workout.intensity === 'High',
             }"
             [pTooltip]="workout.intensity"
-            [tooltipDisabled]="workout.intensity.length <= 10"
-          >
+            [tooltipDisabled]="workout.intensity.length <= 10">
             {{ workout.intensity }}
           </span>
         </td>
         <td
           class="whitespace-nowrap overflow-hidden text-ellipsis"
           [pTooltip]="workout.minutes"
-          [tooltipDisabled]="workout.minutes.toString().length <= 5"
-        >
+          [tooltipDisabled]="workout.minutes.toString().length <= 5">
           {{ workout.minutes }}
         </td>
         <td
           class="whitespace-nowrap overflow-hidden text-ellipsis"
-          [pTooltip]="workout.calories"
-          [tooltipDisabled]="workout.calories.toString().length <= 5"
-        >
-          {{ workout.calories }}
+          [pTooltip]="workout?.calories || ''"
+          [tooltipDisabled]="(workout?.calories || '').toString().length <= 5">
+          {{ workout?.calories }}
         </td>
         <td class="whitespace-nowrap">
           <app-mood-donut [value]="workout.mood"></app-mood-donut>

@@ -4,7 +4,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { octHome, octGraph } from '@ng-icons/octicons';
 import { Tooltip } from 'primeng/tooltip';
 
-import { NavigationService } from '../../../services/navigation.service';
+import { NavigationService } from '../../../services/navigation/navigation.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -23,7 +23,7 @@ export class SidebarComponent {
 
   ngOnInit() {
     this.subscription.add(
-      this.navigationService.activeSection$.subscribe((section) => {
+      this.navigationService.activeSection$.subscribe(section => {
         this.activeSection = section;
         this.cdr.detectChanges();
       })

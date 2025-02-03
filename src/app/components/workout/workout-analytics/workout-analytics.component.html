@@ -12,23 +12,19 @@
           emptyMessage="No usernames found"
           filterPlaceHolder="Search username..."
           styleClass="!border-0 !shadow-none rounded-2xl overflow-hidden "
-          listStyleClass="p-2 rounded-2xl"
-        >
+          listStyleClass="p-2 rounded-2xl">
           <ng-template let-username pTemplate="item">
             <div
-              class="flex items-center px-3 py-2 transition-colors duration-200 rounded-md cursor-pointer mb-1.5 overflow-hidden"
-            >
+              class="flex items-center px-3 py-2 transition-colors duration-200 rounded-md cursor-pointer mb-1.5 overflow-hidden">
               <div class="flex items-center gap-3 min-w-0 w-full">
                 <div
                   [style.background-color]="getAvatarColor(username)"
-                  class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-white text-sm font-medium"
-                >
+                  class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-white text-sm font-medium">
                   {{ username.charAt(0).toUpperCase() }}
                 </div>
                 <span
                   [class.text-pink-600]="selectedUsername$.value === username"
-                  class="text-base font-medium text-gray-700 truncate"
-                >
+                  class="text-base font-medium text-gray-700 truncate">
                   {{ username }}
                 </span>
               </div>
@@ -45,27 +41,22 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
       <app-streak-card [workouts]="filteredWorkouts"></app-streak-card>
       <app-most-active-exercise-card
-        [workouts]="filteredWorkouts"
-      ></app-most-active-exercise-card>
+        [workouts]="filteredWorkouts"></app-most-active-exercise-card>
       <app-total-activities-card
-        [workouts]="filteredWorkouts"
-      ></app-total-activities-card>
+        [workouts]="filteredWorkouts"></app-total-activities-card>
       <app-calories-summary-card
-        [workouts]="filteredWorkouts"
-      ></app-calories-summary-card>
+        [workouts]="filteredWorkouts"></app-calories-summary-card>
     </div>
 
     <!-- Second row -->
     <div class="grid grid-cols-12 gap-4 mb-4">
       <div class="col-span-12 lg:col-span-8">
         <app-weekly-overview-chart
-          [workouts]="filteredWorkouts"
-        ></app-weekly-overview-chart>
+          [workouts]="filteredWorkouts"></app-weekly-overview-chart>
       </div>
       <div class="col-span-12 lg:col-span-4">
         <app-workout-distribution-chart
-          [workouts]="filteredWorkouts"
-        ></app-workout-distribution-chart>
+          [workouts]="filteredWorkouts"></app-workout-distribution-chart>
       </div>
     </div>
 
@@ -73,13 +64,11 @@
     <div class="grid grid-cols-12 gap-4">
       <div class="col-span-12 lg:col-span-4">
         <app-mood-summary-card
-          [workouts]="filteredWorkouts"
-        ></app-mood-summary-card>
+          [workouts]="filteredWorkouts"></app-mood-summary-card>
       </div>
       <div class="col-span-12 lg:col-span-8">
         <app-weekly-activity
-          [workouts]="filteredWorkouts"
-        ></app-weekly-activity>
+          [workouts]="filteredWorkouts"></app-weekly-activity>
       </div>
     </div>
   </div>

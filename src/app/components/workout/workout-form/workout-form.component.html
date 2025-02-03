@@ -4,8 +4,7 @@
     header="Add Workout"
     [modal]="true"
     [(visible)]="visible"
-    [style]="{ width: '30rem' }"
-  >
+    [style]="{ width: '30rem' }">
     <form [formGroup]="workoutForm" (ngSubmit)="onSubmit()">
       <div class="p-fluid">
         <div class="field flex items-center gap-4 mb-4">
@@ -14,8 +13,7 @@
             pInputText
             id="username"
             class="flex-auto"
-            formControlName="username"
-          />
+            formControlName="username" />
         </div>
 
         <div class="field flex items-center gap-4 mb-4">
@@ -27,8 +25,7 @@
             [showIcon]="true"
             class="flex-auto"
             [maxDate]="maxDate"
-            dateFormat="M dd, yy"
-          ></p-datepicker>
+            dateFormat="M dd, yy"></p-datepicker>
         </div>
 
         <div class="field flex items-center gap-4 mb-5">
@@ -42,8 +39,7 @@
             optionLabel="name"
             optionValue="value"
             placeholder="Select a Workout Type"
-            class="flex-auto"
-          ></p-select>
+            class="flex-auto"></p-select>
         </div>
 
         <div class="field flex items-center gap-4 mb-5">
@@ -52,8 +48,7 @@
             <div
               *ngFor="let level of intensityLevels"
               class="cursor-pointer"
-              (click)="selectIntensity(level.value)"
-            >
+              (click)="selectIntensity(level.value)">
               <span
                 [ngClass]="{
                   'px-3 py-1 rounded-full text-sm font-medium': true,
@@ -61,9 +56,8 @@
                   'bg-yellow-100 text-yellow-800': level.value === 'Medium',
                   'bg-red-100 text-red-800': level.value === 'High',
                   'ring-2 ring-offset-2':
-                    workoutForm.get('intensity')?.value === level.value
-                }"
-              >
+                    workoutForm.get('intensity')?.value === level.value,
+                }">
                 {{ level.value }}
               </span>
             </div>
@@ -81,8 +75,7 @@
             [showButtons]="true"
             buttonLayout="horizontal"
             spinnerMode="horizontal"
-            class="flex-auto"
-          ></p-inputNumber>
+            class="flex-auto"></p-inputNumber>
         </div>
 
         <div class="field flex items-center gap-4 mb-6">
@@ -94,30 +87,26 @@
               class="cursor-pointer p-1 rounded-full transition-all duration-200"
               [ngClass]="{
                 'bg-gray-200 scale-110':
-                  workoutForm.get('mood')?.value === value
-              }"
-            >
+                  workoutForm.get('mood')?.value === value,
+              }">
               <div class="relative w-10 h-10">
                 <svg class="w-full h-full" viewBox="0 0 36 36">
                   <path
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     fill="none"
                     stroke="#f1f5f9"
-                    stroke-width="3"
-                  />
+                    stroke-width="3" />
                   <path
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     fill="none"
                     [attr.stroke]="getMoodRingColor(value)"
                     stroke-width="3"
                     [attr.stroke-dasharray]="getMoodDashArray(value)"
-                    stroke-linecap="round"
-                  />
+                    stroke-linecap="round" />
                 </svg>
                 <div
                   class="absolute inset-0 flex items-center justify-center text-sm font-semibold"
-                  [style.color]="getMoodTextColor(value)"
-                >
+                  [style.color]="getMoodTextColor(value)">
                   {{ value }}
                 </div>
               </div>
@@ -129,8 +118,7 @@
           type="submit"
           label="Add Workout"
           class="flex justify-center m-5"
-          [disabled]="workoutForm.invalid"
-        ></p-button>
+          [disabled]="workoutForm.invalid"></p-button>
       </div>
     </form>
   </p-dialog>
