@@ -134,7 +134,7 @@ export class WorkoutFormComponent {
         ),
         day: workoutDate.toLocaleDateString('en-US', { weekday: 'long' }),
       };
-      console.log('Adding workout', workout)
+
       this.workoutService.addWorkout(workout);
       this.workoutForm.reset();
       this.visible = false;
