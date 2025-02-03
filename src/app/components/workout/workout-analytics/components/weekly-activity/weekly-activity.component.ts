@@ -33,15 +33,13 @@ export class WeeklyActivityComponent implements OnChanges {
 
   chartData: any;
   chartOptions: any;
-  weekRange: string = '';
+  weekRange = '';
 
   private readonly workoutColors = {
     [WorkoutType.HIIT]: 'rgba(255, 99, 132, 0.8)',
     [WorkoutType.Running]: 'rgba(54, 162, 235, 0.8)',
     [WorkoutType.Yoga]: 'rgba(75, 192, 192, 0.8)',
-    [WorkoutType.Strength]: 'rgba(255, 206, 86, 0.8)',
     [WorkoutType.Cycling]: 'rgba(153, 102, 255, 0.8)',
-    [WorkoutType.Rest]: 'rgba(232, 244, 248, 0.8)',
   };
 
   ngOnChanges() {
@@ -102,9 +100,6 @@ export class WeeklyActivityComponent implements OnChanges {
       label: type,
       data: dailyWorkouts.map(dayWorkouts => {
         const workout = dayWorkouts.find(w => w.type === type);
-        if (type === WorkoutType.Rest && workout) {
-          return 30;
-        }
         return workout?.duration || 0;
       }),
       backgroundColor: this.workoutColors[type],
@@ -150,7 +145,6 @@ export class WeeklyActivityComponent implements OnChanges {
               const workout = dayWorkouts.find(w => w.type === workoutType);
 
               if (!workout) return '';
-              if (workoutType === WorkoutType.Rest) return 'Rest Day';
 
               return [
                 `${workoutType}`,

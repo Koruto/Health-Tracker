@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
@@ -37,16 +37,12 @@ import { DatePicker } from 'primeng/datepicker';
   templateUrl: './workout-form.component.html',
   styleUrl: './workout-form.component.scss',
 })
-export class WorkoutFormComponent {
+export class WorkoutFormComponent implements OnInit {
   workoutForm: FormGroup;
   workoutTypes = [
     { name: '🏃 Running', value: 'Running' },
-    { name: '🏋️ Weight Training', value: 'Weights' },
-    { name: '🚶 Walking', value: 'Walking' },
-    { name: '🏠 Home Workout', value: 'Home' },
     { name: '🧘 Yoga', value: 'Yoga' },
     { name: '🚲 Cycling', value: 'Cycling' },
-    { name: '💪 Gym Session', value: 'Gym' },
     { name: '⚡ HIIT', value: 'HIIT' },
   ];
 
@@ -56,7 +52,7 @@ export class WorkoutFormComponent {
     { name: 'High', value: 'High' },
   ];
 
-  visible: boolean = false;
+  visible = false;
   todaysDate: Date | undefined;
   maxDate: Date | undefined;
 
@@ -97,19 +93,15 @@ export class WorkoutFormComponent {
     intensity: string
   ): number {
     // Base calories per minute for each workout type
-    const baseCalories: { [key: string]: number } = {
+    const baseCalories: Record<string, number> = {
       Running: 10,
-      Weights: 7,
-      Walking: 4,
-      Home: 6,
       Yoga: 3,
       Cycling: 8,
-      Gym: 7,
       HIIT: 12,
     };
 
     // Intensity multipliers
-    const intensityMultiplier: { [key: string]: number } = {
+    const intensityMultiplier: Record<string, number> = {
       Low: 0.8,
       Medium: 1,
       High: 1.2,

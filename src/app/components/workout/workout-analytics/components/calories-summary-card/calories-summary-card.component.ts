@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { Workout } from '@interfaces/workout';
@@ -10,9 +10,9 @@ import { Ripple } from 'primeng/ripple';
   imports: [CommonModule, CardModule, Ripple],
   templateUrl: './calories-summary-card.component.html',
 })
-export class CaloriesSummaryCardComponent implements OnInit {
+export class CaloriesSummaryCardComponent implements OnInit, OnChanges {
   @Input() workouts: Workout[] = [];
-  totalCalories: number = 0;
+  totalCalories = 0;
 
   ngOnInit() {
     if (this.workouts.length) {

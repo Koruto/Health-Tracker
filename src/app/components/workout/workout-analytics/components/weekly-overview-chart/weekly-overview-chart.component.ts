@@ -15,7 +15,7 @@ export class WeeklyOverviewChartComponent implements OnChanges {
 
   chartData: any;
   chartOptions: any;
-  weekRange: string = '';
+  weekRange = '';
 
   ngOnChanges() {
     this.calculateWeeklyMetrics();
@@ -51,9 +51,6 @@ export class WeeklyOverviewChartComponent implements OnChanges {
       dailyData.push({ date, minutes: 0, calories: 0 });
     }
 
-    let totalMinutes = 0;
-    let highIntensityMinutes = 0;
-
     // Process workout data
     weeklyWorkouts.forEach(workout => {
       const workoutDate = new Date(workout.date);
@@ -64,11 +61,6 @@ export class WeeklyOverviewChartComponent implements OnChanges {
       if (dayIndex !== -1) {
         dailyData[dayIndex].minutes += workout.minutes;
         dailyData[dayIndex].calories += workout.calories;
-
-        totalMinutes += workout.minutes;
-        if (workout.intensity === 'High') {
-          highIntensityMinutes += workout.minutes;
-        }
       }
     });
 

@@ -1,4 +1,4 @@
-import { Component, HostListener, inject } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 
 import { WorkoutAnalyticsComponent } from '../../workout/workout-analytics/workout-analytics.component';
 import { WorkoutManagementComponent } from '../../workout/workout-management/workout-management.component';
@@ -10,7 +10,7 @@ import { NavigationService } from '../../../services/navigation/navigation.servi
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
 })
-export class MainLayoutComponent {
+export class MainLayoutComponent implements OnInit {
   private navigationService = inject(NavigationService);
 
   constructor() {

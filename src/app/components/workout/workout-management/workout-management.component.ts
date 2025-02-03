@@ -19,7 +19,7 @@ import { WorkoutListComponent } from '../workout-list/workout-list.component';
 export class WorkoutManagementComponent {
   @ViewChild(WorkoutListComponent) workoutList!: WorkoutListComponent;
 
-  visible: boolean = false;
+  visible = false;
 
   showDialog() {
     this.visible = true;

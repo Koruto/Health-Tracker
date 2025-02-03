@@ -1,27 +1,4 @@
 <div class="card">
-  <!-- Navigation Buttons -->
-  <div class="flex justify-content-between mb-4">
-    <div class="flex gap-2">
-      <p-button
-        type="button"
-        icon="pi pi-chevron-left"
-        (click)="prev()"
-        [disabled]="isFirstPage()"
-        [text]="true" />
-      <p-button
-        type="button"
-        icon="pi pi-refresh"
-        (click)="reset()"
-        [text]="true" />
-      <p-button
-        type="button"
-        icon="pi pi-chevron-right"
-        (click)="next()"
-        [disabled]="isLastPage()"
-        [text]="true" />
-    </div>
-  </div>
-
   <!-- Data Table -->
   <p-table
     #dt1
@@ -33,7 +10,7 @@
     [showCurrentPageReport]="true"
     [rowsPerPageOptions]="[5, 10, 25, 50]"
     currentPageReportTemplate="{first}-{last} of {totalRecords} workouts"
-    styleClass="p-datatable-striped"
+    styleClass="p-datatable-striped mt-11"
     rowGroupMode="rowspan"
     groupRowsBy="username"
     [scrollable]="true"

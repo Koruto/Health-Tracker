@@ -14,14 +14,14 @@ import { ChartModule } from 'primeng/chart';
 export class MoodSummaryCardComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
-  avgMood: number = 0;
-  moodEmoji: string = '';
-  moodLabel: string = '';
-  moodTrend: string = '';
-  trendIcon: string = '';
-  trendPercentage: number = 0;
-  ringColor: string = '';
-  tooltipColor: string = '';
+  avgMood = 0;
+  moodEmoji = '';
+  moodLabel = '';
+  moodTrend = '';
+  trendIcon = '';
+  trendPercentage = 0;
+  ringColor = '';
+  tooltipColor = '';
 
   chartData: any;
   chartOptions: any;

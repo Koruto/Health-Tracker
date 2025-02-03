@@ -15,7 +15,7 @@ import { Ripple } from 'primeng/ripple';
 export class TotalActivitiesCardComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
-  currentWeekCount: number = 0;
+  currentWeekCount = 0;
 
   ngOnChanges() {
     this.calculateTotalActivities();

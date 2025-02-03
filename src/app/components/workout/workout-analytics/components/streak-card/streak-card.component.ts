@@ -14,7 +14,7 @@ import { Ripple } from 'primeng/ripple';
 })
 export class StreakCardComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
-  currentStreak: number = 0;
+  currentStreak = 0;
 
   ngOnChanges() {
     this.calculateStreaks();
@@ -39,7 +39,7 @@ export class StreakCardComponent implements OnChanges {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    let currentDate = new Date(workouts[0].date);
+    const currentDate = new Date(workouts[0].date);
     currentDate.setHours(0, 0, 0, 0);
 
     // If the latest workout is not from today or yesterday, return 0

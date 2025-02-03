@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './mood-donut.component.scss',
 })
 export class MoodDonutComponent {
-  @Input() value: number = 0;
+  @Input() value = 0;
 
   private getColors(): { ring: string; text: string } {
     switch (this.value) {

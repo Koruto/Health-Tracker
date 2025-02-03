@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { TableModule, TablePageEvent } from 'primeng/table';
+import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
@@ -56,7 +56,6 @@ export class WorkoutListComponent implements OnInit, OnDestroy {
   first = 0;
   rows = 5;
   totalRecords = 0;
-  loading = false;
 
   constructor(
     private workoutService: WorkoutService,
@@ -156,32 +155,5 @@ export class WorkoutListComponent implements OnInit, OnDestroy {
   private refreshData(): void {
     // Force a new emission from the service
     this.workoutService.refreshWorkouts();
-  }
-
-  // Pagination methods remain the same
-  next(): void {
-    this.first = Math.min(
-      this.first + this.rows,
-      this.totalRecords - this.rows
-    );
-  }
-
-  prev(): void {
-    this.first = Math.max(0, this.first - this.rows);
-  }
-
-  reset(): void {
-    this.first = 0;
-    this.clearFilters();
-  }
-
-  isLastPage(): boolean {
-    return this.totalRecords
-      ? this.first + this.rows >= this.totalRecords
-      : true;
-  }
-
-  isFirstPage(): boolean {
-    return this.first === 0;
   }
 }

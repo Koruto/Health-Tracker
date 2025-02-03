@@ -15,7 +15,6 @@ describe('WorkoutListComponent', () => {
   let fixture: ComponentFixture<WorkoutListComponent>;
   let workoutService: jasmine.SpyObj<WorkoutService>;
   let mockWorkouts$: BehaviorSubject<Workout[]>;
-  let cdr: ChangeDetectorRef;
 
   const mockWorkouts: Workout[] = [
     {
@@ -77,7 +76,7 @@ describe('WorkoutListComponent', () => {
       calories: 500,
       mood: 6,
       day: 'Saturday',
-    }
+    },
   ];
 
   beforeEach(async () => {
@@ -102,38 +101,40 @@ describe('WorkoutListComponent', () => {
     workoutService = TestBed.inject(
       WorkoutService
     ) as jasmine.SpyObj<WorkoutService>;
-    cdr = TestBed.inject(ChangeDetectorRef);
     fixture = TestBed.createComponent(WorkoutListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('Component Initialization', () => {
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should initialize with default values', () => {
+      expect(component.searchQuery).toBe('');
+      expect(component.selectedWorkoutTypes).toEqual([]);
+      expect(component.selectedIntensities).toEqual([]);
+      expect(component.first).toBe(0);
+      expect(component.rows).toBe(5);
+      expect(component.totalRecords).toBe(mockWorkouts.length);
+    });
+
+    describe('initializeWorkoutTypeOptions', () => {
+      it('should initialize workout type options from workouts', () => {
+        const expectedOptions = [
+          { name: 'Running', value: 'Running' },
+          { name: 'Yoga', value: 'Yoga' },
+          { name: 'Swimming', value: 'Swimming' },
+          { name: 'Weightlifting', value: 'Weightlifting' },
+          { name: 'CrossFit', value: 'CrossFit' },
+        ];
+        expect(component.workoutTypeOptions).toEqual(expectedOptions);
+      });
+    });
   });
 
-  it('should initialize with default values', () => {
-    expect(component.searchQuery).toBe('');
-    expect(component.selectedWorkoutTypes).toEqual([]);
-    expect(component.selectedIntensities).toEqual([]);
-    expect(component.first).toBe(0);
-    expect(component.rows).toBe(5);
-    expect(component.totalRecords).toBe(mockWorkouts.length);
-  });
-
-  it('should initialize workout type options from workouts', () => {
-    const expectedOptions = [
-      { name: 'Running', value: 'Running' },
-      { name: 'Yoga', value: 'Yoga' },
-      { name: 'Swimming', value: 'Swimming' },
-      { name: 'Weightlifting', value: 'Weightlifting' },
-      { name: 'CrossFit', value: 'CrossFit' }
-    ];
-    expect(component.workoutTypeOptions).toEqual(expectedOptions);
-  });
-
-  describe('Filtering', () => {
-    // Test private applyFilters method directly
+  describe('Filter Methods', () => {
     describe('applyFilters', () => {
       it('should handle empty filters', () => {
         const result = component['applyFilters'](mockWorkouts);
@@ -213,147 +214,117 @@ describe('WorkoutListComponent', () => {
       });
     });
 
-    it('should filter by workout type', fakeAsync(() => {
-      // Update mockWorkouts$ with filtered data
-      const filteredWorkouts = mockWorkouts.filter(
-        w => w.workoutType === 'Running'
-      );
+    describe('onSearch', () => {
+      it('should reset pagination and refresh data', fakeAsync(() => {
+        component.first = 5;
+        const refreshSpy = spyOn(component as any, 'refreshData');
 
-      component.onWorkoutTypeFilter({
-        value: [{ name: 'Running', value: 'Running' }],
+        component.onSearch();
+
+        expect(component.first).toBe(0);
+        expect(refreshSpy).toHaveBeenCalled();
+      }));
+
+      it('should filter by search query', fakeAsync(() => {
+        const filteredWorkouts = mockWorkouts.filter(
+          w => w.username === 'user1'
+        );
+        component.searchQuery = 'user1';
+
+        component.onSearch();
+        mockWorkouts$.next(filteredWorkouts);
+        tick();
+        fixture.detectChanges();
+
+        expect(component.tableData.length).toBe(1);
+        expect(component.tableData[0].username).toBe('user1');
+      }));
+    });
+
+    describe('onWorkoutTypeFilter', () => {
+      it('should update selected workout types and refresh data', fakeAsync(() => {
+        const filteredWorkouts = mockWorkouts.filter(
+          w => w.workoutType === 'Running'
+        );
+
+        component.onWorkoutTypeFilter({
+          value: [{ name: 'Running', value: 'Running' }],
+        });
+        mockWorkouts$.next(filteredWorkouts);
+        tick();
+        fixture.detectChanges();
+
+        expect(component.tableData.length).toBe(2);
+        expect(
+          component.tableData.every(w => w.workoutType === 'Running')
+        ).toBeTrue();
+      }));
+    });
+
+    describe('onIntensityFilter', () => {
+      it('should update selected intensities and refresh data', fakeAsync(() => {
+        const filteredWorkouts = mockWorkouts.filter(
+          w => w.intensity === 'High'
+        );
+
+        component.onIntensityFilter({
+          value: [{ name: 'High', value: 'High' }],
+        });
+        mockWorkouts$.next(filteredWorkouts);
+        tick();
+        fixture.detectChanges();
+
+        expect(component.tableData.length).toBe(4);
+        expect(component.tableData[0].intensity).toBe('High');
+      }));
+    });
+
+    describe('clearFilters', () => {
+      it('should reset all filters and refresh data', fakeAsync(() => {
+        component.searchQuery = 'user1';
+        component.selectedWorkoutTypes = [
+          { name: 'Running', value: 'Running' },
+        ];
+        component.selectedIntensities = [{ name: 'High', value: 'High' }];
+        component.first = 5;
+
+        component.clearFilters();
+        mockWorkouts$.next(mockWorkouts);
+        tick();
+        fixture.detectChanges();
+
+        expect(component.searchQuery).toBe('');
+        expect(component.selectedWorkoutTypes).toEqual([]);
+        expect(component.selectedIntensities).toEqual([]);
+        expect(component.first).toBe(0);
+        expect(component.tableData.length).toBe(mockWorkouts.length);
+      }));
+    });
+  });
+
+  describe('Lifecycle Methods', () => {
+    describe('ngOnInit', () => {
+      it('should subscribe to filtered workouts and update total records', fakeAsync(() => {
+        const filteredWorkouts = mockWorkouts.filter(
+          w => w.workoutType === 'Running'
+        );
+        mockWorkouts$.next(filteredWorkouts);
+        tick();
+
+        expect(component.totalRecords).toBe(filteredWorkouts.length);
+      }));
+    });
+
+    describe('ngOnDestroy', () => {
+      it('should clean up subscription on destroy', () => {
+        const subscriptionSpy = spyOn(component['subscription'], 'unsubscribe');
+        component.ngOnDestroy();
+        expect(subscriptionSpy).toHaveBeenCalled();
       });
-      mockWorkouts$.next(filteredWorkouts);
-      tick();
-      fixture.detectChanges();
-
-      expect(component.tableData.length).toBe(2);
-      expect(
-        component.tableData.every(w => w.workoutType === 'Running')
-      ).toBeTrue();
-    }));
-
-    it('should filter by intensity', fakeAsync(() => {
-      const filteredWorkouts = mockWorkouts.filter(w => w.intensity === 'High');
-
-      component.onIntensityFilter({ value: [{ name: 'High', value: 'High' }] });
-      mockWorkouts$.next(filteredWorkouts);
-      tick();
-      fixture.detectChanges();
-
-      expect(component.tableData.length).toBe(4);
-      expect(component.tableData[0].intensity).toBe('High');
-    }));
-
-    it('should filter by search query', fakeAsync(() => {
-      const filteredWorkouts = mockWorkouts.filter(w => w.username === 'user1');
-      component.searchQuery = 'user1';
-
-      component.onSearch();
-      mockWorkouts$.next(filteredWorkouts);
-      tick();
-      fixture.detectChanges();
-
-      expect(component.tableData.length).toBe(1);
-      expect(component.tableData[0].username).toBe('user1');
-    }));
-
-    it('should clear all filters', fakeAsync(() => {
-      component.searchQuery = 'user1';
-      component.selectedWorkoutTypes = [{ name: 'Running', value: 'Running' }];
-      component.selectedIntensities = [{ name: 'High', value: 'High' }];
-      component.onSearch();
-
-      component.clearFilters();
-      mockWorkouts$.next(mockWorkouts);
-      tick();
-      fixture.detectChanges();
-
-      expect(component.searchQuery).toBe('');
-      expect(component.selectedWorkoutTypes).toEqual([]);
-      expect(component.selectedIntensities).toEqual([]);
-      expect(component.tableData.length).toBe(mockWorkouts.length);
-    }));
-
-    it('should handle multiple filters simultaneously', fakeAsync(() => {
-      const filteredWorkouts = mockWorkouts.filter(
-        w => w.workoutType === 'Running' && w.intensity === 'High'
-      );
-
-      component.selectedWorkoutTypes = [{ name: 'Running', value: 'Running' }];
-      component.selectedIntensities = [{ name: 'High', value: 'High' }];
-      component.onSearch();
-      mockWorkouts$.next(filteredWorkouts);
-      tick();
-      fixture.detectChanges();
-
-      expect(component.tableData.length).toBe(1);
-    }));
+    });
   });
 
-  describe('Pagination', () => {
-    it('should handle next page correctly', () => {
-      component.first = 0;
-      component.rows = 5;
-      component.totalRecords = 15;
-
-      component.next();
-      expect(component.first).toBe(5);
-
-      component.next();
-      expect(component.first).toBe(10);
-    });
-
-    it('should handle previous page correctly', () => {
-      component.first = 10;
-      component.rows = 5;
-
-      component.prev();
-      expect(component.first).toBe(5);
-
-      component.prev();
-      expect(component.first).toBe(0);
-    });
-
-    it('should identify first page correctly', () => {
-      component.first = 0;
-      expect(component.isFirstPage()).toBeTrue();
-
-      component.first = 5;
-      expect(component.isFirstPage()).toBeFalse();
-    });
-
-    it('should identify last page correctly', () => {
-      component.first = 0;
-      component.rows = 5;
-      component.totalRecords = 15;
-
-      expect(component.isLastPage()).toBeFalse();
-
-      component.first = 10;
-      expect(component.isLastPage()).toBeTrue();
-    });
-
-    it('should reset pagination', () => {
-      component.first = 10;
-      component.reset();
-      expect(component.first).toBe(0);
-    });
-
-    // it('should handle edge cases in pagination', () => {
-    //   component.first = 10;
-    //   component.rows = 5;
-    //   component.totalRecords = 12; // Not exactly divisible by rows
-
-    //   component.next();
-    //   expect(component.first).toBe(10); // Should not exceed last possible page
-
-    //   component.first = 0;
-    //   component.prev();
-    //   expect(component.first).toBe(0); // Should not go below 0
-    // });
-  });
-
-  describe('Service interaction', () => {
+  describe('Data Service Interaction', () => {
     it('should call refreshWorkouts when filters are applied', () => {
       component.onSearch();
       expect(workoutService.refreshWorkouts).toHaveBeenCalled();
@@ -379,67 +350,61 @@ describe('WorkoutListComponent', () => {
       fixture.detectChanges();
 
       expect(component.totalRecords).toBe(0);
-      expect(component.isLastPage()).toBeTrue();
-      expect(component.isFirstPage()).toBeTrue();
     }));
-  });
-
-  it('should clean up subscription on destroy', () => {
-    const subscriptionSpy = spyOn(component['subscription'], 'unsubscribe');
-    component.ngOnDestroy();
-    expect(subscriptionSpy).toHaveBeenCalled();
   });
 
   describe('Mood Filtering', () => {
-    it('should handle workouts with very low mood (1)', fakeAsync(() => {
-      const filteredWorkouts = mockWorkouts.filter(w => w.mood === 1);
-      component.searchQuery = 'user5';  // The user with mood 1
-      
-      component.onSearch();
-      mockWorkouts$.next(filteredWorkouts);
-      tick();
-      fixture.detectChanges();
+    describe('applyFilters with mood values', () => {
+      it('should handle workouts with very low mood (1)', fakeAsync(() => {
+        const filteredWorkouts = mockWorkouts.filter(w => w.mood === 1);
+        component.searchQuery = 'user5'; // The user with mood 1
 
-      expect(component.tableData.length).toBe(1);
-      expect(component.tableData[0].mood).toBe(1);
-    }));
+        component.onSearch();
+        mockWorkouts$.next(filteredWorkouts);
+        tick();
+        fixture.detectChanges();
 
-    it('should handle workouts with low mood (2)', fakeAsync(() => {
-      const filteredWorkouts = mockWorkouts.filter(w => w.mood === 2);
-      component.searchQuery = 'user4';  // The user with mood 2
-      
-      component.onSearch();
-      mockWorkouts$.next(filteredWorkouts);
-      tick();
-      fixture.detectChanges();
+        expect(component.tableData.length).toBe(1);
+        expect(component.tableData[0].mood).toBe(1);
+      }));
 
-      expect(component.tableData.length).toBe(1);
-      expect(component.tableData[0].mood).toBe(2);
-    }));
+      it('should handle workouts with low mood (2)', fakeAsync(() => {
+        const filteredWorkouts = mockWorkouts.filter(w => w.mood === 2);
+        component.searchQuery = 'user4'; // The user with mood 2
 
-    it('should handle workouts with maximum mood (6)', fakeAsync(() => {
-      const filteredWorkouts = mockWorkouts.filter(w => w.mood === 6);
-      component.searchQuery = 'user6';  // The user with mood 6
-      
-      component.onSearch();
-      mockWorkouts$.next(filteredWorkouts);
-      tick();
-      fixture.detectChanges();
+        component.onSearch();
+        mockWorkouts$.next(filteredWorkouts);
+        tick();
+        fixture.detectChanges();
 
-      expect(component.tableData.length).toBe(1);
-      expect(component.tableData[0].mood).toBe(6);
-    }));
+        expect(component.tableData.length).toBe(1);
+        expect(component.tableData[0].mood).toBe(2);
+      }));
 
-    it('should handle filtering multiple mood values', fakeAsync(() => {
-      const filteredWorkouts = mockWorkouts.filter(w => w.mood <= 2);
-      
-      component.onSearch();
-      mockWorkouts$.next(filteredWorkouts);
-      tick();
-      fixture.detectChanges();
+      it('should handle workouts with maximum mood (6)', fakeAsync(() => {
+        const filteredWorkouts = mockWorkouts.filter(w => w.mood === 6);
+        component.searchQuery = 'user6'; // The user with mood 6
 
-      expect(component.tableData.length).toBe(2);
-      expect(component.tableData.every(w => w.mood <= 2)).toBeTrue();
-    }));
+        component.onSearch();
+        mockWorkouts$.next(filteredWorkouts);
+        tick();
+        fixture.detectChanges();
+
+        expect(component.tableData.length).toBe(1);
+        expect(component.tableData[0].mood).toBe(6);
+      }));
+
+      it('should handle filtering multiple mood values', fakeAsync(() => {
+        const filteredWorkouts = mockWorkouts.filter(w => w.mood <= 2);
+
+        component.onSearch();
+        mockWorkouts$.next(filteredWorkouts);
+        tick();
+        fixture.detectChanges();
+
+        expect(component.tableData.length).toBe(2);
+        expect(component.tableData.every(w => w.mood <= 2)).toBeTrue();
+      }));
+    });
   });
 });

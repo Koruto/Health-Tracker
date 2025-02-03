@@ -20,7 +20,7 @@ interface ExerciseSummary {
 export class MostActiveExerciseCardComponent implements OnChanges {
   @Input() workouts: Workout[] = [];
 
-  mostActiveExercise: string = '';
+  mostActiveExercise = '';
 
   ngOnChanges() {
     this.calculateMostActiveExercise();
