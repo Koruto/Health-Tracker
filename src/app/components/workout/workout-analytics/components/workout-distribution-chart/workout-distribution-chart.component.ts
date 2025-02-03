@@ -30,21 +30,8 @@ export class WorkoutDistributionChartComponent implements OnChanges {
   }
 
   private processWorkoutData(): void {
-    // Get date range for last 7 days
-    const currentDate = new Date();
-    currentDate.setHours(23, 59, 59, 999);
-    const sevenDaysAgo = new Date(currentDate);
-    sevenDaysAgo.setDate(currentDate.getDate() - 6); // Changed from -7 to -6 to include today
-    sevenDaysAgo.setHours(0, 0, 0, 0);
-
-    // Filter workouts for last 7 days
-    const recentWorkouts = this.workouts.filter(workout => {
-      const workoutDate = new Date(workout.date);
-      return workoutDate >= sevenDaysAgo && workoutDate <= currentDate;
-    });
-
     // Count workouts by type
-    const workoutCounts = recentWorkouts.reduce(
+    const workoutCounts = this.workouts.reduce(
       (acc, workout) => {
         acc[workout.workoutType] = (acc[workout.workoutType] || 0) + 1;
         return acc;

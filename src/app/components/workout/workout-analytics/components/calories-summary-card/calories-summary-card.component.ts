@@ -1,8 +1,9 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
-import { Workout } from '@interfaces/workout';
 import { Ripple } from 'primeng/ripple';
+
+import { Workout } from '@interfaces/workout';
 
 @Component({
   selector: 'app-calories-summary-card',

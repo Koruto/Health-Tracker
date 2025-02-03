@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { ListboxModule } from 'primeng/listbox';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
-import { WorkoutService } from '../../../services/workout/workout.service';
-import { Workout } from '../../../interfaces/workout';
+import { WorkoutService } from '@services/workout/workout.service';
+import { Workout } from '@interfaces/workout';
 import { StreakCardComponent } from './components/streak-card/streak-card.component';
 import { MostActiveExerciseCardComponent } from './components/most-active-exercise-card/most-active-exercise-card.component';
 import { TotalActivitiesCardComponent } from './components/total-activities-card/total-activities-card.component';
@@ -12,11 +15,6 @@ import { WeeklyOverviewChartComponent } from './components/weekly-overview-chart
 import { WorkoutDistributionChartComponent } from './components/workout-distribution-chart/workout-distribution-chart.component';
 import { MoodSummaryCardComponent } from './components/mood-summary-card/mood-summary-card.component';
 import { WeeklyActivityComponent } from './components/weekly-activity/weekly-activity.component';
-
-// PrimeNG Imports
-import { ListboxModule } from 'primeng/listbox';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-workout-analytics',
@@ -61,7 +59,7 @@ export class WorkoutAnalyticsComponent implements OnInit {
         // Update usernames whenever workouts change
         this.usernames = Array.from(
           new Set(workouts.map((workout: Workout) => workout.username))
-        );
+        ).sort();
 
         // Set default username if needed
         if (this.usernames.length > 0 && !this.selectedUsername$.value) {

@@ -2,8 +2,9 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
-import { Workout } from '@interfaces/workout';
 import { ChartModule } from 'primeng/chart';
+
+import { Workout } from '@interfaces/workout';
 
 @Component({
   selector: 'app-mood-summary-card',
@@ -80,19 +81,7 @@ export class MoodSummaryCardComponent implements OnChanges {
   }
 
   private calculateMoodMetrics(): void {
-    const currentDate = new Date();
-    currentDate.setHours(23, 59, 59, 999);
-    const sevenDaysAgo = new Date(currentDate);
-    sevenDaysAgo.setDate(currentDate.getDate() - 6);
-    sevenDaysAgo.setHours(0, 0, 0, 0);
-
-    // Filter workouts for last 7 days
-    const recentWorkouts = this.workouts.filter(workout => {
-      const workoutDate = new Date(workout.date);
-      return workoutDate >= sevenDaysAgo && workoutDate <= currentDate;
-    });
-
-    const userWorkouts = recentWorkouts.sort(
+    const userWorkouts = this.workouts.sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 
@@ -179,7 +168,7 @@ export class MoodSummaryCardComponent implements OnChanges {
           data: [this.avgMood, 5 - this.avgMood],
           backgroundColor: [this.ringColor, 'rgba(0,0,0,0.05)'],
           borderWidth: 0,
-          cutout: '85%', // Increased cutout for thinner ring
+          cutout: '85%',
         },
       ],
     };
@@ -195,10 +184,10 @@ export class MoodSummaryCardComponent implements OnChanges {
       },
       responsive: true,
       maintainAspectRatio: true,
-      rotation: 90, // Changed rotation to start from right
+      rotation: 90,
       circumference: 360,
       cutout: '85%',
-      events: [], // Disable all events
+      events: [],
     };
   }
 }

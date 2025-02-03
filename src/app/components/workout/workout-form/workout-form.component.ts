@@ -4,6 +4,8 @@ import {
   FormBuilder,
   Validators,
   ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -70,12 +72,20 @@ export class WorkoutFormComponent implements OnInit {
     });
   }
 
+  private noWhitespaceValidator = (
+    control: AbstractControl
+  ): ValidationErrors | null => {
+    if (!control.value) return null;
+    const isWhitespace = control.value.toString().trim().length === 0;
+    return isWhitespace ? { whitespace: true } : null;
+  };
+
   constructor(
     private fb: FormBuilder,
     private workoutService: WorkoutService
   ) {
     this.workoutForm = this.fb.group({
-      username: ['', Validators.required],
+      username: ['', [Validators.required, this.noWhitespaceValidator]],
       workoutType: ['', Validators.required],
       minutes: [
         1,
@@ -119,6 +129,7 @@ export class WorkoutFormComponent implements OnInit {
 
       const workout = {
         ...formValue,
+        username: formValue.username.trim(),
         calories: this.calculateCalories(
           formValue.minutes,
           formValue.workoutType,

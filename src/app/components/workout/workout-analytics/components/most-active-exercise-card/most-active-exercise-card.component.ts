@@ -2,13 +2,10 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
-import { Workout } from '@interfaces/workout';
 import { Ripple } from 'primeng/ripple';
 
-interface ExerciseSummary {
-  type: string;
-  totalMinutes: number;
-}
+import { ExerciseSummary } from '@interfaces/exercise-summary';
+import { Workout } from '@interfaces/workout';
 
 @Component({
   selector: 'app-most-active-exercise-card',

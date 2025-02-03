@@ -1,10 +1,6 @@
 <div class="card flex justify-center">
   <p-button (click)="showDialog()" label="Add Workout" />
-  <p-dialog
-    header="Add Workout"
-    [modal]="true"
-    [(visible)]="visible"
-    [style]="{ width: '30rem' }">
+  <p-dialog header="Add Workout" [modal]="true" [(visible)]="visible">
     <form [formGroup]="workoutForm" (ngSubmit)="onSubmit()">
       <div class="p-fluid">
         <div class="field flex items-center gap-4 mb-4">

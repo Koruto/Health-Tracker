@@ -1,0 +1,19 @@
+.custom-scrollbar {
+  margin-right: 1rem;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 30px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: transparent;
+  margin-top: 40vh; /* Start from middle of the screen */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-image: url('/scrollbar.png');
+  background-repeat: no-repeat, no-repeat;
+  background-size: 30px;
+  background-position: center; /* Center the image */
+}

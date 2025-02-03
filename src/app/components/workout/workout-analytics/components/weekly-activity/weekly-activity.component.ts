@@ -8,12 +8,7 @@ import { FormsModule } from '@angular/forms';
 
 import { Workout } from '@interfaces/workout';
 import { WorkoutType } from '@interfaces/workout-types';
-
-interface DailyWorkout {
-  type: WorkoutType;
-  duration: number;
-  calories: number;
-}
+import { DailyWorkout } from '@interfaces/daily-workout';
 
 @Component({
   selector: 'app-weekly-activity',
@@ -47,7 +42,6 @@ export class WeeklyActivityComponent implements OnChanges {
   }
 
   private processWeeklyData(): void {
-    // Calculate the current week's date range for display
     const currentDate = new Date();
     const sevenDaysAgo = new Date(currentDate);
     sevenDaysAgo.setDate(currentDate.getDate() - 6);
@@ -60,28 +54,44 @@ export class WeeklyActivityComponent implements OnChanges {
       day: 'numeric',
     })}`;
 
-    // Process the pre-filtered workouts by day
-    const dailyWorkouts: DailyWorkout[][] = Array(7)
+    // Initialize array to store combined workouts for each day using Map
+    const dailyWorkouts: Map<WorkoutType, DailyWorkout>[] = Array(7)
       .fill(null)
-      .map(() => []);
+      .map(() => new Map());
 
+    // Process and combine workouts
     this.workouts.forEach(workout => {
       const workoutDate = new Date(workout.date);
-      // Calculate days from the start (7 days ago)
       const daysDiff = Math.floor(
         (workoutDate.getTime() - sevenDaysAgo.getTime()) / (1000 * 60 * 60 * 24)
       );
-      // This will place today's workouts at index 6, yesterday's at 5, etc.
+
       if (daysDiff >= 0 && daysDiff < 7) {
-        dailyWorkouts[daysDiff].push({
-          type: workout.workoutType as WorkoutType,
-          duration: workout.minutes,
-          calories: workout.calories,
-        });
+        const workoutType = workout.workoutType as WorkoutType;
+        const dayMap = dailyWorkouts[daysDiff];
+
+        if (dayMap.has(workoutType)) {
+          // Combine with existing workout of same type
+          const existing = dayMap.get(workoutType)!;
+          existing.duration += workout.minutes;
+          existing.calories += workout.calories;
+        } else {
+          // Add new workout type for the day
+          dayMap.set(workoutType, {
+            type: workoutType,
+            duration: workout.minutes,
+            calories: workout.calories,
+          });
+        }
       }
     });
 
-    this.prepareChartData(dailyWorkouts);
+    // Convert Maps to arrays for chart processing
+    const combinedDailyWorkouts = dailyWorkouts.map(dayMap =>
+      Array.from(dayMap.values())
+    );
+
+    this.prepareChartData(combinedDailyWorkouts);
   }
 
   private prepareChartData(dailyWorkouts: DailyWorkout[][]): void {
@@ -148,8 +158,8 @@ export class WeeklyActivityComponent implements OnChanges {
 
               return [
                 `${workoutType}`,
-                `Duration: ${workout.duration} mins`,
-                `Calories: ${workout.calories} cal`,
+                `Total Duration: ${workout.duration} mins`,
+                `Total Calories: ${workout.calories} cal`,
               ];
             },
           },

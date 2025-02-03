@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Workout } from '../../interfaces/workout';
+
+import { Workout } from '@interfaces/workout';
 import { INITIAL_WORKOUTS } from '../../data/initial-workouts';
 
 @Injectable({ providedIn: 'root' })

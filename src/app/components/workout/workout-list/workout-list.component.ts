@@ -9,12 +9,14 @@ import { RatingModule } from 'primeng/rating';
 import { TooltipModule } from 'primeng/tooltip';
 import { RippleModule } from 'primeng/ripple';
 import { TagModule } from 'primeng/tag';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { octFilterRemove } from '@ng-icons/octicons';
+import { map, Observable, Subscription, tap } from 'rxjs';
 
-import { WorkoutService } from '../../../services/workout/workout.service';
+import { WorkoutService } from '@services/workout/workout.service';
 import { Workout } from '@interfaces/workout';
 import { CalendarModule } from 'primeng/calendar';
 import { MoodDonutComponent } from '../workout-analytics/components/mood-donut/mood-donut.component';
-import { map, Observable, Subscription, tap } from 'rxjs';
 
 @Component({
   selector: 'app-workout-list',
@@ -32,9 +34,11 @@ import { map, Observable, Subscription, tap } from 'rxjs';
     CalendarModule,
     TagModule,
     MoodDonutComponent,
+    NgIcon,
   ],
   templateUrl: './workout-list.component.html',
   styleUrl: './workout-list.component.scss',
+  viewProviders: [provideIcons({ octFilterRemove })],
 })
 export class WorkoutListComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
@@ -67,7 +71,7 @@ export class WorkoutListComponent implements OnInit, OnDestroy {
         return this.applyFilters(workouts);
       }),
       tap((workouts: Workout[]) => {
-        this.tableData = [...workouts]; // Create a new reference
+        this.tableData = [...workouts];
         this.totalRecords = workouts.length;
         this.cdr.detectChanges();
       })
@@ -155,5 +159,13 @@ export class WorkoutListComponent implements OnInit, OnDestroy {
   private refreshData(): void {
     // Force a new emission from the service
     this.workoutService.refreshWorkouts();
+  }
+
+  get hasActiveFilters(): boolean {
+    return (
+      this.searchQuery.trim() !== '' ||
+      this.selectedWorkoutTypes.length > 0 ||
+      this.selectedIntensities.length > 0
+    );
   }
 }

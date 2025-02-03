@@ -38,7 +38,7 @@
             placeholder="Filter workouts"
             (onChange)="onWorkoutTypeFilter($event)"
             optionLabel="name"
-            [style]="{ width: '200px' }"
+            class="w-60"
             display="chip">
             <ng-template let-option pTemplate="item">
               <div class="flex align-items-center gap-2">
@@ -55,7 +55,7 @@
             placeholder="Filter intensity"
             (onChange)="onIntensityFilter($event)"
             optionLabel="name"
-            [style]="{ width: '200px' }"
+            class="w-60"
             display="chip">
             <ng-template let-option pTemplate="item">
               <div class="flex align-items-center gap-2">
@@ -70,7 +70,13 @@
             (click)="clearFilters()"
             [text]="true"
             tooltip="Clear all filters"
-            tooltipPosition="top" />
+            tooltipPosition="top">
+            <ng-icon
+              name="octFilterRemove"
+              size="20"
+              [color]="hasActiveFilters ? '#E71A7F' : '#919191'"
+              [class.opacity-50]="!hasActiveFilters" />
+          </p-button>
         </div>
       </div>
     </ng-template>

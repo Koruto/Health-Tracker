@@ -23,10 +23,8 @@ export class WeeklyOverviewChartComponent implements OnChanges {
 
   private calculateWeeklyMetrics(): void {
     const currentDate = new Date();
-    currentDate.setHours(23, 59, 59, 999); // Set to end of day
     const sevenDaysAgo = new Date(currentDate);
-    sevenDaysAgo.setDate(currentDate.getDate() - 6); // Changed from -7 to -6 to include today
-    sevenDaysAgo.setHours(0, 0, 0, 0);
+    sevenDaysAgo.setDate(currentDate.getDate() - 6);
 
     // Format date range
     this.weekRange = `${sevenDaysAgo.toLocaleDateString('en-US', {
@@ -37,12 +35,6 @@ export class WeeklyOverviewChartComponent implements OnChanges {
       day: 'numeric',
     })}`;
 
-    // Filter workouts for last 7 days
-    const weeklyWorkouts = this.workouts.filter(workout => {
-      const workoutDate = new Date(workout.date);
-      return workoutDate >= sevenDaysAgo && workoutDate <= currentDate;
-    });
-
     // Initialize daily data for the past 7 days
     const dailyData: { date: Date; minutes: number; calories: number }[] = [];
     for (let i = 0; i < 7; i++) {
@@ -52,7 +44,7 @@ export class WeeklyOverviewChartComponent implements OnChanges {
     }
 
     // Process workout data
-    weeklyWorkouts.forEach(workout => {
+    this.workouts.forEach(workout => {
       const workoutDate = new Date(workout.date);
       const dayIndex = dailyData.findIndex(
         day => day.date.toDateString() === workoutDate.toDateString()

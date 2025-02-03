@@ -1,11 +1,17 @@
-import { ChangeDetectorRef, Component, inject, OnInit, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { octHome, octGraph } from '@ng-icons/octicons';
 import { Tooltip } from 'primeng/tooltip';
-
-import { NavigationService } from '../../../services/navigation/navigation.service';
 import { Subscription } from 'rxjs';
+
+import { NavigationService } from '@services/navigation/navigation.service';
 
 @Component({
   selector: 'app-sidebar',

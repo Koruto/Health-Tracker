@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { WorkoutService } from './workout.service';
-import { INITIAL_WORKOUTS } from '../../data/initial-workouts';
-import { Workout } from '../../interfaces/workout';
 import { firstValueFrom } from 'rxjs';
+
+import { WorkoutService } from '@services/workout/workout.service';
+import { INITIAL_WORKOUTS } from '../../data/initial-workouts';
+import { Workout } from '@interfaces/workout';
 
 describe('WorkoutService', () => {
   let service: WorkoutService;
