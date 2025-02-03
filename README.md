@@ -1,59 +1,172 @@
-# HealthTracker
+# Health Tracker
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.5.
+A modern, responsive SPA for tracking and analyzing workout activities. Built with Angular and PrimeNG, featuring real-time analytics, detailed workout logging, and intuitive data visualization.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- 📊 Real-time workout analytics and trends
+- 🏃‍♂️ Multiple workout type support (Running, Yoga, HIIT, Cycling)
+- 📈 Visual data representation with charts
+- 🔍 Advanced filtering and search capabilities
+- 💾 Local storage persistence
+- 🎨 Modern UI with PrimeNG components
+
+## Tech Stack
+
+- Angular 17
+- PrimeNG
+- Tailwind
+- TypeScript
+- SCSS
+- Jasmine/Karma for testing
+
+## Prerequisites
+
+- Node.js (v18.x or higher)
+- npm (v9.x or higher)
+- Angular CLI (v17.x)
+
+## Getting Started
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/Koruto/Health-Tracker
+cd workout-tracker
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Start the development server:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+4. Open your browser and navigate to `http://localhost:4200`
 
-## Code scaffolding
+## Project Structure
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```
+src/
+┣ app/
+┃ ┣ components/
+┃ ┃ ┣ layout/
+┃ ┃ ┃ ┣ main-layout/
+┃ ┃ ┃ ┃ ┣ main-layout.component.html
+┃ ┃ ┃ ┃ ┣ main-layout.component.scss
+┃ ┃ ┃ ┃ ┗ main-layout.component.ts
+┃ ┃ ┃ ┗ sidebar/
+┃ ┃ ┃   ┣ sidebar.component.html
+┃ ┃ ┃   ┣ sidebar.component.scss
+┃ ┃ ┃   ┗ sidebar.component.ts
+┃ ┃ ┗ workout/
+┃ ┃   ┣ workout-analytics/
+┃ ┃ ┃ ┃ ┣ components/
+┃ ┃ ┃ ┃ ┣ workout-analytics.component.html
+┃ ┃ ┃ ┃ ┣ workout-analytics.component.scss
+┃ ┃ ┃ ┃ ┗ workout-analytics.component.ts
+┃ ┃   ┣ workout-form/
+┃ ┃ ┃ ┃ ┣ workout-form.component.html
+┃ ┃ ┃ ┃ ┣ workout-form.component.scss
+┃ ┃ ┃ ┃ ┗ workout-form.component.ts
+┃ ┃   ┣ workout-list/
+┃ ┃ ┃ ┃ ┣ workout-list.component.html
+┃ ┃ ┃ ┃ ┣ workout-list.component.scss
+┃ ┃ ┃ ┃ ┣ workout-list.component.spec.ts
+┃ ┃ ┃ ┃ ┗ workout-list.component.ts
+┃ ┃   ┗ workout-management/
+┃ ┃ ┃   ┣ workout-management.component.html
+┃ ┃ ┃   ┣ workout-management.component.scss
+┃ ┃ ┃   ┗ workout-management.component.ts
+┃ ┣ data/
+┃ ┃ ┗ initial-workouts.ts
+┃ ┣ interfaces/
+┃ ┃ ┣ daily-workout.ts
+┃ ┃ ┣ exercise-summary.ts
+┃ ┃ ┣ workout-types.ts
+┃ ┃ ┗ workout.ts
+┃ ┣ services/
+┃ ┃ ┣ navigation/
+┃ ┃ ┃ ┗ navigation.service.ts
+┃ ┃ ┗ workout/
+┃ ┃   ┣ workout.service.spec.ts
+┃ ┃   ┗ workout.service.ts
+┃ ┣ app.component.html
+┃ ┣ app.component.scss
+┃ ┣ app.component.ts
+┃ ┗ app.config.ts
+┣ index.html
+┣ main.ts
+┗ styles.scss
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Components Overview
+
+### Workout Dashboard
+
+- `WorkoutListComponent`: Displays workouts in a filterable, sortable table
+  - Features: Advanced filtering, sorting, pagination
+  - Tests: Coverage for filter logic, pagination, and data display
+
+### Analytics
+
+- `WorkoutAnalyticsComponent`: Visualizes workout data and trends
+  - Features: Interactive charts, trend analysis
+
+### Form Handling
+
+- `WorkoutFormComponent`: Handles workout data entry
+  - Comprehensive form validation
+  - Real-time calorie calculation
+  - Support for multiple workout types
+
+### Layout
+
+- `MainLayoutComponent`: Main application layout structure
+- `NavSidebarComponent`: Navigation and app controls
+  - Smooth scroll navigation
+  - Data reset functionality
+
+## Testing
+
+The project uses Jasmine and Karma for testing. Key test coverage includes:
 
 ```bash
-ng generate --help
+npm test             # Run unit tests
+npm run test:cov     # Run for coverage report
 ```
 
-## Building
+### Test Coverage Areas
 
-To build the project run:
+- Form validation and submission
+- Data filtering and sorting
+- Service methods and state management
+- Component lifecycle and interactions
+
+Example test pattern for components:
+
+```typescript
+describe('WorkoutListComponent', () => {
+  // Setup and initialization tests
+  // Filter functionality tests
+  // Pagination tests
+  // Service interaction tests
+});
+```
+
+## State Management
+
+- Uses RxJS BehaviorSubject for state management
+- Local storage persistence for data retention
+- Service pattern for centralized data handling
+
+## Building for Production
 
 ```bash
-ng build
+npm run build
 ```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
