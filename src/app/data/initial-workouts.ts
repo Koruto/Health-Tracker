@@ -1,6 +1,6 @@
 import { Workout } from '@interfaces/workout';
 
-export const INITIAL_WORKOUTS: Workout[] = [
+const BASE_WORKOUTS: Workout[] = [
   {
     username: 'Emma',
     workoutType: 'HIIT',
@@ -274,3 +274,45 @@ export const INITIAL_WORKOUTS: Workout[] = [
     mood: 3,
   },
 ];
+
+function getRandomTimeOnDate(date: Date): Date {
+  const newDate = new Date(date);
+  newDate.setHours(Math.floor(Math.random() * 12) + 8); // Random hour between 8 AM and 8 PM
+  newDate.setMinutes(Math.floor(Math.random() * 60));
+  return newDate;
+}
+
+// Function to get relative dates
+function generateWorkoutDates(): Workout[] {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // Create an array of the last 7 days
+  const dates = Array.from({ length: 7 }, (_, i) => {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    return date;
+  });
+
+  // Distribute workouts across days
+  return BASE_WORKOUTS.map((workout, index) => {
+    const baseDate = dates[index % dates.length];
+    const workoutDate = getRandomTimeOnDate(baseDate);
+
+    return {
+      ...workout,
+      date: workoutDate.toISOString(),
+      day: [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+      ][workoutDate.getDay()],
+    };
+  });
+}
+
+export const INITIAL_WORKOUTS: Workout[] = generateWorkoutDates();

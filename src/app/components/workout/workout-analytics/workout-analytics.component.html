@@ -5,7 +5,7 @@
       <div class="rounded-2xl">
         <p-listbox
           [options]="usernames"
-          [(ngModel)]="selectedUsername$.value"
+          [(ngModel)]="selectedUsername"
           (onChange)="onUsernameSelect($event.value)"
           scrollHeight="max(600px, calc(100vh - 380px))"
           emptyMessage="No usernames found"
@@ -22,7 +22,7 @@
                   {{ username.charAt(0).toUpperCase() }}
                 </div>
                 <span
-                  [class.text-pink-600]="selectedUsername$.value === username"
+                  [class.text-pink-600]="selectedUsername === username"
                   class="text-base font-medium text-gray-700 truncate">
                   {{ username }}
                 </span>

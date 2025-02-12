@@ -36,7 +36,8 @@ import { WeeklyActivityChartComponent } from './components/weekly-activity-chart
 })
 export class WorkoutAnalyticsComponent implements OnInit {
   usernames: string[] = [];
-  selectedUsername$ = new BehaviorSubject<string>('');
+  selectedUsername: string = '';
+  private selectedUsername$ = new BehaviorSubject<string>('');
   filteredWorkouts$: Observable<Workout[]>;
 
   private avatarColors = [
@@ -97,6 +98,7 @@ export class WorkoutAnalyticsComponent implements OnInit {
 
   onUsernameSelect(username: string | null) {
     const effectiveUsername = username || this.usernames[0];
+    this.selectedUsername = effectiveUsername;
     this.selectedUsername$.next(effectiveUsername);
   }
 
